@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "170535038732",
+    "firebase_url": "https://loja-de-servicos-ca1b0.firebaseio.com",
+    "project_id": "loja-de-servicos-ca1b0",
+    "storage_bucket": "loja-de-servicos-ca1b0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:170535038732:android:0eccb213650c7fb3832329",
+        "android_client_info": {
+          "package_name": "com.ajdev.lojadeservicos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "170535038732-mnfgd2dleq64mek2gqqbgse0nj4g3g9o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ajdev.lojadeservicos",
+            "certificate_hash": "a5e563474f101d26474301939c88ead1c4206ebb"
+          }
+        },
+        {
+          "client_id": "170535038732-2vi4t3riors7i22bi7kddqcu1tkdtcsf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGFiU3USwqhbPxgm1xwe4s0eJah42W0eY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "170535038732-2vi4t3riors7i22bi7kddqcu1tkdtcsf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
