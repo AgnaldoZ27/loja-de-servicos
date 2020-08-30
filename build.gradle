@@ -22,8 +22,9 @@ allprojects {
         google()
         jcenter()
 
-        //Repositório do slider
+        //Repositório do slider e Navigation Bottom
         maven { url 'https://jitpack.io' }
+        maven { url "https://maven.google.com" }
     }
 }
 
