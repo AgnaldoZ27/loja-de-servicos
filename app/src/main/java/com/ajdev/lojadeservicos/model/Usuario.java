@@ -2,6 +2,7 @@ package com.ajdev.lojadeservicos.model;
 
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
 
 public class Usuario {
 
@@ -16,9 +17,11 @@ public class Usuario {
 
     public void salvar() {
         DatabaseReference firebase = ConfiguracaoFirebase.getFirebaseDataBase();
-        firebase.child("users")
+        firebase.child("usuarios")
                 .child(this.idUsuario)
                 .setValue(this);
+
+
     }
 
     public Usuario(String nome, String email, String senha) {
@@ -51,6 +54,7 @@ public class Usuario {
         this.email = email;
     }
 
+    @Exclude
     public String getSenha() {
         return senha;
     }

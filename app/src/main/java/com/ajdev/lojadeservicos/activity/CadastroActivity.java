@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.ajdev.lojadeservicos.R;
@@ -27,6 +28,7 @@ public class CadastroActivity extends AppCompatActivity {
     private Button botaoCadastrar;
     private FirebaseAuth autenticacao;
     private Usuario usuario;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class CadastroActivity extends AppCompatActivity {
         campoEmail = findViewById(R.id.editEmail);
         campoSenha = findViewById(R.id.editSenha);
         botaoCadastrar = findViewById(R.id.botaoCadastrar);
+        progressBar = findViewById(R.id.progressBarCadastro);
 
         botaoCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +89,13 @@ public class CadastroActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
 
-                            String idUsuario = Base64Custom.codificarBase64(usuario.getEmail());
+                            progressBar.setVisibility(View.VISIBLE);
+                            Toast.makeText(CadastroActivity.this,
+                                    "Cadastro com Sucesso",
+                                    Toast.LENGTH_SHORT).show();
+
+                            //Salvar dados do usuario.
+                            String idUsuario = task.getResult().getUser().getUid();
                             usuario.setIdUsuario(idUsuario);
                             usuario.salvar();
                             finish();
