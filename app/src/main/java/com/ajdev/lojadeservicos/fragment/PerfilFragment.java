@@ -1,5 +1,6 @@
 package com.ajdev.lojadeservicos.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,8 +8,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.GridView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.ajdev.lojadeservicos.R;
+import com.ajdev.lojadeservicos.activity.EditarPerfilActivity;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +24,12 @@ import com.ajdev.lojadeservicos.R;
  * create an instance of this fragment.
  */
 public class PerfilFragment extends Fragment {
+
+    private ProgressBar progressBar;
+    private CircleImageView imagePerfil;
+    public GridView gridViewPerfil;
+    private TextView textProfissao;
+    private Button buttonEditarPerfil;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,6 +75,25 @@ public class PerfilFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_perfil, container, false);
+        View view = inflater.inflate(R.layout.fragment_perfil, container, false);
+
+        //Configurações dos componentes
+        gridViewPerfil = view.findViewById(R.id.gridViewPerfil);
+        progressBar = view.findViewById(R.id.progressBarPerfil);
+        imagePerfil = view.findViewById(R.id.imagePerfil);
+        textProfissao = view.findViewById(R.id.textProfissao);
+        buttonEditarPerfil = view.findViewById(R.id.buttonEditarPerfil);
+
+        //Abre edição de perfil
+        buttonEditarPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), EditarPerfilActivity.class);
+                startActivity(i);
+            }
+        });
+
+        return view;
+
     }
 }
