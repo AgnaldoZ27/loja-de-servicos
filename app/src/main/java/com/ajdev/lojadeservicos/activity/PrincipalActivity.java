@@ -1,17 +1,25 @@
 package com.ajdev.lojadeservicos.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.ajdev.lojadeservicos.R;
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
+import com.ajdev.lojadeservicos.fragment.HomeFragment;
+import com.ajdev.lojadeservicos.fragment.MensagemFragment;
+import com.ajdev.lojadeservicos.fragment.PerfilFragment;
+import com.ajdev.lojadeservicos.fragment.PesquisaFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 public class PrincipalActivity extends AppCompatActivity {
 
@@ -29,6 +37,66 @@ public class PrincipalActivity extends AppCompatActivity {
 
         //configurações de objetos
         autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
+
+        //Configurar bottom navigation view
+        configurarBottomNavigationView();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.viewPager, new HomeFragment()).commit();
+
+    }
+
+    /**
+     * Método responsável por criar o Bottom Navigation
+     */
+    public void configurarBottomNavigationView() {
+        BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.bottomNavigation);
+
+        //faz configurações iniciais do Bottom Navigation
+        bottomNavigationViewEx.enableAnimation(false);
+        bottomNavigationViewEx.enableItemShiftingMode(false);
+        bottomNavigationViewEx.enableShiftingMode(false);
+        bottomNavigationViewEx.setTextVisibility(true);
+
+        //habilitar navegação
+        habilitarNavegacao(bottomNavigationViewEx);
+    }
+
+    /**
+     * Método responsável por tratar eventos de click na BottomNavigation
+     */
+    private void habilitarNavegacao(BottomNavigationViewEx viewEx) {
+        viewEx.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                switch (menuItem.getItemId()) {
+                    case R.id.ic_home:
+                        fragmentTransaction.replace(R.id.viewPager, new HomeFragment()).commit();
+                        return true;
+                }
+                switch (menuItem.getItemId()) {
+                    case R.id.ic_pesquisa:
+                        fragmentTransaction.replace(R.id.viewPager, new PesquisaFragment()).commit();
+                        return true;
+                }
+                switch (menuItem.getItemId()) {
+                    case R.id.ic_mensagem:
+                        fragmentTransaction.replace(R.id.viewPager, new MensagemFragment()).commit();
+                        return true;
+                }
+                switch (menuItem.getItemId()) {
+                    case R.id.ic_perfil:
+                        fragmentTransaction.replace(R.id.viewPager, new PerfilFragment()).commit();
+                        return true;
+                }
+
+                return false;
+            }
+        });
     }
 
     @Override
