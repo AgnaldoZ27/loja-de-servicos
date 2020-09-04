@@ -1,5 +1,6 @@
 package com.ajdev.lojadeservicos.helper;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -20,9 +21,12 @@ public class UsuarioFirebase {
         return usuario.getCurrentUser();
     }
 
+    public static String getIdentficadorUsuario(){
+        return getUsuarioAtual().getUid();
+    }
+
     public static void atualizarNomeUsuario(String nome) {
         try {
-
             //Usuario logado.
             FirebaseUser user = getUsuarioAtual();
 
@@ -37,6 +41,31 @@ public class UsuarioFirebase {
                 public void onComplete(@NonNull Task<Void> task) {
                     if (!task.isSuccessful()) {
                         Log.d("Perfil", "Erro ao atualizar nome de perfil.");
+                    }
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void atualizarFotoUsuario(Uri url) {
+        try {
+            //Usuario logado.
+            FirebaseUser user = getUsuarioAtual();
+
+            //Configurar objeto para alteração de perfil
+            UserProfileChangeRequest profile = new UserProfileChangeRequest
+                    .Builder()
+                    .setPhotoUri(url)
+                    .build();
+
+            getUsuarioAtual().updateProfile(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (!task.isSuccessful()) {
+                        Log.d("Perfil", "Erro ao atualizar a foto de perfil.");
                     }
                 }
             });
