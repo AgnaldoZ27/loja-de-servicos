@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.ajdev.lojadeservicos.R;
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
-import com.ajdev.lojadeservicos.helper.Base64Custom;
+import com.ajdev.lojadeservicos.helper.UsuarioFirebase;
 import com.ajdev.lojadeservicos.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -90,16 +90,20 @@ public class CadastroActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
 
                             progressBar.setVisibility(View.VISIBLE);
+
+                            //Salvar dados do usuario no Firebase.
+                            String idUsuario = task.getResult().getUser().getUid();
+                            usuario.setIdUsuario(idUsuario);
+                            usuario.salvar();
+
+                            //Salvar dados do profile no Firebase.
+                            UsuarioFirebase.atualizarNomeUsuario(usuario.getNome());
+
                             Toast.makeText(CadastroActivity.this,
                                     "Cadastro com Sucesso",
                                     Toast.LENGTH_SHORT).show();
 
-                            //Salvar dados do usuario.
-                            String idUsuario = task.getResult().getUser().getUid();
-                            usuario.setIdUsuario(idUsuario);
-                            usuario.salvar();
                             finish();
-
                         } else {
 
                             String excecao = "";
