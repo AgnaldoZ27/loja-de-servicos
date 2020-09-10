@@ -2,13 +2,30 @@ package com.ajdev.lojadeservicos.fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import com.ajdev.lojadeservicos.R;
+import com.ajdev.lojadeservicos.adapter.AdapterPesquisa;
+import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
+import com.ajdev.lojadeservicos.model.Usuario;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +33,14 @@ import com.ajdev.lojadeservicos.R;
  * create an instance of this fragment.
  */
 public class PesquisaFragment extends Fragment {
+
+    //Widget
+    private SearchView searchViewPesquisa;
+    private RecyclerView recyclerViewPesquisa;
+
+    private List<Usuario> listaUsuario;
+    private DatabaseReference usuarioRef;
+    private AdapterPesquisa adapterPesquisa;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,6 +86,71 @@ public class PesquisaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pesquisa, container, false);
+        View view = inflater.inflate(R.layout.fragment_pesquisa, container, false);
+
+        searchViewPesquisa = view.findViewById(R.id.searchViewPesquisa);
+        recyclerViewPesquisa = view.findViewById(R.id.recyclerViewPesquisa);
+
+        //Confgigurações iniciais
+        listaUsuario = new ArrayList<>();
+        usuarioRef = ConfiguracaoFirebase.getFirebaseDataBase()
+                .child("usuarios");
+
+        //Configura RecyclerView
+        recyclerViewPesquisa.setHasFixedSize(true);
+        recyclerViewPesquisa.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapterPesquisa = new AdapterPesquisa(listaUsuario, getActivity());
+        recyclerViewPesquisa.setAdapter(adapterPesquisa);
+
+        //Configura searchView
+        searchViewPesquisa.setQueryHint("Buscar prestadores");
+        searchViewPesquisa.setOnQueryTextListener(new android.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                String textoDigitado = query.toUpperCase();
+                pesquisarPrestador(textoDigitado);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        return view;
+
+    }
+
+    private void pesquisarPrestador(final String texto){
+
+        //limpa lista
+        listaUsuario.clear();
+
+        //pesquisa usuários caso tenha texto na pesquisa
+        if(texto.length() > 0){
+            Query query = usuarioRef.orderByChild("nome")
+                    .startAt(texto)
+                    .endAt(texto + "\uf8ff");
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for(DataSnapshot ds : dataSnapshot.getChildren()){
+                        listaUsuario.add(ds.getValue(Usuario.class));
+                    }
+
+                    adapterPesquisa.notifyDataSetChanged();
+
+                    /*int total = listaUsuario.size();
+                    Log.i("totalUsuario", "total: "+ total);*/
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
     }
 }

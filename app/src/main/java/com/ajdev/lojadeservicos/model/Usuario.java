@@ -10,7 +10,10 @@ import java.util.Map;
 public class Usuario {
 
     private String idUsuario;
+    private String tipoCadastro;
     private String nome;
+    private String CEP;
+    private String telefone;
     private String email;
     private String senha;
     private String caminhoFoto;
@@ -22,6 +25,7 @@ public class Usuario {
     public void salvar() {
         DatabaseReference firebase = ConfiguracaoFirebase.getFirebaseDataBase();
         firebase.child("usuarios")
+                .child("cliente")
                 .child(this.idUsuario)
                 .setValue(this);
     }
@@ -30,6 +34,7 @@ public class Usuario {
         DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebaseDataBase();
         DatabaseReference usuarioRef = firebaseRef
                 .child("usuarios")
+                .child("cliente")
                 .child(getIdUsuario());
 
         Map<String, Object> valoresUsuario = convertParaMap();
@@ -38,16 +43,23 @@ public class Usuario {
 
     public Map<String, Object> convertParaMap(){
         HashMap<String, Object> usuarioMap = new HashMap<>();
+        usuarioMap.put("tipoCadastro", getTipoCadastro());
         usuarioMap.put("email",getEmail());
         usuarioMap.put("nome", getNome());
+        usuarioMap.put("CEP", getCEP());
+        usuarioMap.put("telefone", getTelefone());
         usuarioMap.put("idUsuario", getIdUsuario());
         usuarioMap.put("caminhoFoto", getCaminhoFoto());
 
         return usuarioMap;
     }
 
-    public Usuario(String nome, String email, String senha, String caminhoFoto) {
+    public Usuario(String idUsuario, String tipoCadastro, String nome, String CEP, String telefone, String email, String senha, String caminhoFoto) {
+        this.idUsuario = idUsuario;
+        this.tipoCadastro = tipoCadastro;
         this.nome = nome;
+        this.CEP = CEP;
+        this.telefone = telefone;
         this.email = email;
         this.senha = senha;
         this.caminhoFoto = caminhoFoto;
@@ -61,12 +73,36 @@ public class Usuario {
         this.idUsuario = idUsuario;
     }
 
+    public String getTipoCadastro() {
+        return tipoCadastro;
+    }
+
+    public void setTipoCadastro(String tipoCadastro) {
+        this.tipoCadastro = tipoCadastro;
+    }
+
     public String getNome() {
         return nome;
     }
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getCEP() {
+        return CEP;
+    }
+
+    public void setCEP(String CEP) {
+        this.CEP = CEP;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
     public String getEmail() {
