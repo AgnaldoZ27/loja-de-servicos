@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.storage.FirebaseStorage;
 
 public class UsuarioFirebase {
 
@@ -82,6 +83,7 @@ public class UsuarioFirebase {
         Usuario usuario = new Usuario();
         usuario.setEmail(firebaseUser.getEmail());
         usuario.setNome(firebaseUser.getDisplayName());
+        usuario.setTelefone(firebaseUser.getPhoneNumber());
         usuario.setIdUsuario(firebaseUser.getUid());
 
         if(firebaseUser.getPhotoUrl() == null){

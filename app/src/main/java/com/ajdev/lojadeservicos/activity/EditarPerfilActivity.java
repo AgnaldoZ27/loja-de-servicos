@@ -1,9 +1,5 @@
 package com.ajdev.lojadeservicos.activity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -13,6 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.ajdev.lojadeservicos.R;
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
@@ -28,7 +28,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -37,7 +36,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
 
     private CircleImageView imageEditarPerfil;
     private TextView textAlterarFoto;
-    private TextInputEditText editNomePerfil, editEmailPerfil;
+    private TextInputEditText editNomePerfil, editCepPerfil, editTelefonePerfil, editEmailPerfil;
     private Button buttonSalvarAlteracoes;
     private Usuario usuarioLogado;
     private static final int SELECAO_GALERIA = 200;
@@ -62,12 +61,13 @@ public class EditarPerfilActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
 
-        //inicializar componenetes
+        //inicializar componentes
         inicializarComponentes();
 
         //recuperar dados do usuario.
         FirebaseUser usuarioPerfil = UsuarioFirebase.getUsuarioAtual();
         editNomePerfil.setText(usuarioPerfil.getDisplayName());
+        editTelefonePerfil.setText(usuarioPerfil.getPhoneNumber());
         editEmailPerfil.setText(usuarioPerfil.getEmail());
         Uri url = usuarioPerfil.getPhotoUrl();
         if(url != null){
@@ -193,6 +193,8 @@ public class EditarPerfilActivity extends AppCompatActivity {
         imageEditarPerfil = findViewById(R.id.imageEditarPerfil);
         textAlterarFoto = findViewById(R.id.textAlterarFoto);
         editNomePerfil = findViewById(R.id.editAlterarNome);
+        editCepPerfil = findViewById(R.id.editAlterarCep);
+        editTelefonePerfil = findViewById(R.id.editAlterarTelefone);
         editEmailPerfil = findViewById(R.id.editAlterarEmail);
         buttonSalvarAlteracoes = findViewById(R.id.buttonSalvarAlteracoes);
         editEmailPerfil.setFocusable(false);
