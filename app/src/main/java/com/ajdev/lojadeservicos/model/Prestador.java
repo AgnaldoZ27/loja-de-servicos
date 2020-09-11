@@ -3,10 +3,11 @@ package com.ajdev.lojadeservicos.model;
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
 import com.google.firebase.database.DatabaseReference;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Prestador extends Usuario {
+public class Prestador extends Usuario implements Serializable {
 
     private String CPF_CNPJ;
 

@@ -1,22 +1,23 @@
 package com.ajdev.lojadeservicos.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.ContactsContract;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.SearchView;
-
 import com.ajdev.lojadeservicos.R;
+import com.ajdev.lojadeservicos.activity.PerfilPrestadorActivity;
 import com.ajdev.lojadeservicos.adapter.AdapterPesquisa;
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
+import com.ajdev.lojadeservicos.helper.RecyclerItemClickListener;
 import com.ajdev.lojadeservicos.model.Usuario;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -101,6 +102,31 @@ public class PesquisaFragment extends Fragment {
         recyclerViewPesquisa.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapterPesquisa = new AdapterPesquisa(listaUsuario, getActivity());
         recyclerViewPesquisa.setAdapter(adapterPesquisa);
+
+        //Configurar evento de clique
+        recyclerViewPesquisa.addOnItemTouchListener(new RecyclerItemClickListener(
+                getActivity(),
+                recyclerViewPesquisa,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Usuario usuarioSelecionado = listaUsuario.get(position);
+                        Intent i = new Intent(getActivity(), PerfilPrestadorActivity.class);
+                        i.putExtra("prestadorSelecionado", usuarioSelecionado);
+                        startActivity(i);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    }
+                }
+        ));
 
         //Configura searchView
         searchViewPesquisa.setQueryHint("Buscar prestadores");

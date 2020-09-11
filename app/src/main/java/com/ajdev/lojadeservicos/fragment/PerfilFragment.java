@@ -29,7 +29,7 @@ public class PerfilFragment extends Fragment {
     private CircleImageView imagePerfil;
     public GridView gridViewPerfil;
     private TextView textProfissao;
-    private Button buttonEditarPerfil;
+    private Button buttonAcaoPerfil;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -82,10 +82,10 @@ public class PerfilFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressBarPerfil);
         imagePerfil = view.findViewById(R.id.imageEditarPerfil);
         textProfissao = view.findViewById(R.id.textProfissao);
-        buttonEditarPerfil = view.findViewById(R.id.buttonEditarPerfil);
+        buttonAcaoPerfil = view.findViewById(R.id.buttonAcaoPerfil);
 
         //Abre edição de perfil
-        buttonEditarPerfil.setOnClickListener(new View.OnClickListener() {
+        buttonAcaoPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), EditarPerfilActivity.class);
