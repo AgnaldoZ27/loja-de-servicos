@@ -2,6 +2,7 @@ package com.ajdev.lojadeservicos.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.ajdev.lojadeservicos.activity.PerfilPrestadorActivity;
 import com.ajdev.lojadeservicos.adapter.AdapterPesquisa;
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
 import com.ajdev.lojadeservicos.helper.RecyclerItemClickListener;
+import com.ajdev.lojadeservicos.model.Prestador;
 import com.ajdev.lojadeservicos.model.Usuario;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,7 +41,7 @@ public class PesquisaFragment extends Fragment {
     private SearchView searchViewPesquisa;
     private RecyclerView recyclerViewPesquisa;
 
-    private List<Usuario> listaUsuario;
+    private List<Prestador> listaUsuario;
     private DatabaseReference usuarioRef;
     private AdapterPesquisa adapterPesquisa;
 
@@ -95,7 +97,8 @@ public class PesquisaFragment extends Fragment {
         //Confgigurações iniciais
         listaUsuario = new ArrayList<>();
         usuarioRef = ConfiguracaoFirebase.getFirebaseDataBase()
-                .child("usuarios");
+                .child("usuarios")
+                .child("prestador");
 
         //Configura RecyclerView
         recyclerViewPesquisa.setHasFixedSize(true);
@@ -110,7 +113,7 @@ public class PesquisaFragment extends Fragment {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Usuario usuarioSelecionado = listaUsuario.get(position);
+                        Prestador usuarioSelecionado = listaUsuario.get(position);
                         Intent i = new Intent(getActivity(), PerfilPrestadorActivity.class);
                         i.putExtra("prestadorSelecionado", usuarioSelecionado);
                         startActivity(i);
@@ -133,41 +136,45 @@ public class PesquisaFragment extends Fragment {
         searchViewPesquisa.setOnQueryTextListener(new android.widget.SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                String textoDigitado = query.toUpperCase();
-                pesquisarPrestador(textoDigitado);
-                return true;
+                return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                String textoDigitado = newText;
+                pesquisarPrestador(textoDigitado);
+                return true;
             }
+
         });
 
         return view;
 
     }
 
-    private void pesquisarPrestador(final String texto){
+    private void pesquisarPrestador(String texto) {
 
         //limpa lista
         listaUsuario.clear();
 
         //pesquisa usuários caso tenha texto na pesquisa
-        if(texto.length() > 0){
-            Query query = usuarioRef.orderByChild("nome")
+        if (texto.length() >= 3) {
+            Query query = usuarioRef.orderByChild("tipoCadastro")
                     .startAt(texto)
                     .endAt(texto + "\uf8ff");
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for(DataSnapshot ds : dataSnapshot.getChildren()){
-                        listaUsuario.add(ds.getValue(Usuario.class));
+                    //limpa lista
+                    listaUsuario.clear();
+
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        listaUsuario.add(ds.getValue(Prestador.class));
                     }
 
                     adapterPesquisa.notifyDataSetChanged();
 
-                    /*int total = listaUsuario.size();
+                   /*int total = listaUsuario.size();
                     Log.i("totalUsuario", "total: "+ total);*/
                 }
 

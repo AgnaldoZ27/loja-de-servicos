@@ -27,6 +27,6 @@
             android:layout_weight="1"
             android:gravity="center|left"
             android:paddingLeft="10dp"
-            android:text="TextView" />
+            android:text="Nome do Usuário" />
     </LinearLayout>
 </LinearLayout>

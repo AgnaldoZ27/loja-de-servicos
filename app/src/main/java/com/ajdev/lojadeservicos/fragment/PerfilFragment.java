@@ -60,6 +60,7 @@ public class PerfilFragment extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+
     }
 
     @Override
@@ -82,7 +83,7 @@ public class PerfilFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressBarPerfil);
         imagePerfil = view.findViewById(R.id.imageEditarPerfil);
         textProfissao = view.findViewById(R.id.textProfissao);
-        buttonAcaoPerfil = view.findViewById(R.id.buttonAcaoPerfil);
+        buttonAcaoPerfil = view.findViewById(R.id.buttonEnviarMensagem);
 
         //Abre edição de perfil
         buttonAcaoPerfil.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +91,7 @@ public class PerfilFragment extends Fragment {
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), EditarPerfilActivity.class);
                 startActivity(i);
+
             }
         });
 
