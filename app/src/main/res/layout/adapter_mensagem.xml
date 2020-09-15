@@ -3,26 +3,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp">
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageViewMensagem"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:src="@drawable/avatar" />
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingTop="6dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="6dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:padding="5dp">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/textNomeMensagem"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageViewMensagem"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/avatar" />
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Nome"
-            android:textStyle="bold" />
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/textNomeMensagem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nome"
+                android:textStyle="bold" />
+        </LinearLayout>
+
     </LinearLayout>
+
+    <include layout="@layout/divisor"/>
+
 </LinearLayout>

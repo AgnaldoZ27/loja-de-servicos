@@ -36,10 +36,10 @@ public class PerfilPrestadorActivity extends AppCompatActivity {
         //Recuperar usuario selecionadao
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
-            usuarioSelecionado = (Prestador) bundle.getSerializable("usuarioSelecionado");
+            usuarioSelecionado = (Prestador) bundle.getSerializable("prestadorSelecionado");
 
             //Configura nome do usuário na toolbar
-            //getSupportActionBar().setTitle(usuarioSelecionado.getNome());
+            getSupportActionBar().setTitle(usuarioSelecionado.getNome());
 
         }
 
@@ -61,7 +61,11 @@ public class PerfilPrestadorActivity extends AppCompatActivity {
     }
 
     public void abrirTelaChat(){
-        startActivity(new Intent(this, ChatActivity.class));
+
+        Intent i = new Intent();
+        i.putExtra("chatMensagem", usuarioSelecionado);
+        startActivity(new Intent (this, ChatActivity.class));
+
         finish();
     }
 }

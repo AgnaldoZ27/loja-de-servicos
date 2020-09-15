@@ -94,7 +94,7 @@ public class PesquisaFragment extends Fragment {
         searchViewPesquisa = view.findViewById(R.id.searchViewPesquisa);
         recyclerViewPesquisa = view.findViewById(R.id.recyclerViewPesquisa);
 
-        //Confgigurações iniciais
+        //Configurações iniciais
         listaUsuario = new ArrayList<>();
         usuarioRef = ConfiguracaoFirebase.getFirebaseDataBase()
                 .child("usuarios")
