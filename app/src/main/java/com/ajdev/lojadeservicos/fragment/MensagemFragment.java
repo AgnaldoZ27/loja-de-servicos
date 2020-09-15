@@ -2,13 +2,28 @@ package com.ajdev.lojadeservicos.fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ajdev.lojadeservicos.R;
+import com.ajdev.lojadeservicos.adapter.MensagemAdapter;
+import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
+import com.ajdev.lojadeservicos.model.Usuario;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import java.sql.ClientInfoStatus;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +31,12 @@ import com.ajdev.lojadeservicos.R;
  * create an instance of this fragment.
  */
 public class MensagemFragment extends Fragment {
+
+    private RecyclerView recyclerViewMensagem;
+    private MensagemAdapter adapter;
+    private ArrayList<Usuario> mensagens = new ArrayList<>();
+    private DatabaseReference usuarioRef;
+    private ValueEventListener valueEventListenerMensagens;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,6 +82,56 @@ public class MensagemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_mensagem, container, false);
+        View view = inflater.inflate(R.layout.fragment_mensagem, container, false);
+
+        //Configurações iniciais
+        recyclerViewMensagem = view.findViewById(R.id.recyclerViewMensagem);
+        usuarioRef = ConfiguracaoFirebase.getFirebaseDataBase().child("usuarios");
+
+        //Configurações do adapter
+        adapter = new MensagemAdapter(mensagens, getActivity());
+
+        //Configurar Recyclerview
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerViewMensagem.setLayoutManager(layoutManager);
+        recyclerViewMensagem.setHasFixedSize(true);
+        recyclerViewMensagem.setAdapter(adapter);
+
+        //Configurar evento de clice no recyclerview
+
+
+        return view;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        recuperarMensagens();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        usuarioRef.removeEventListener(valueEventListenerMensagens);
+    }
+
+    public void recuperarMensagens(){
+       valueEventListenerMensagens = usuarioRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    Usuario usuario = ds.getValue(Usuario.class);
+                    mensagens.add(usuario);
+                }
+
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 }
