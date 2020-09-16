@@ -47,7 +47,7 @@ public class Usuario implements Serializable {
         usuarioMap.put("tipoCadastro", getTipoCadastro());
         usuarioMap.put("email",getEmail());
         usuarioMap.put("nome", getNome());
-        usuarioMap.put("CEP", getCEP());
+        usuarioMap.put("cep", getCEP());
         usuarioMap.put("telefone", getTelefone());
         usuarioMap.put("idUsuario", getIdUsuario());
         usuarioMap.put("caminhoFoto", getCaminhoFoto());
@@ -74,6 +74,7 @@ public class Usuario implements Serializable {
         this.idUsuario = idUsuario;
     }
 
+    @Exclude
     public String getTipoCadastro() {
         return tipoCadastro;
     }
@@ -122,6 +123,7 @@ public class Usuario implements Serializable {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+
 
     public String getCaminhoFoto() {
         return caminhoFoto;

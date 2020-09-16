@@ -12,7 +12,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class UsuarioFirebase {
 
@@ -22,7 +26,7 @@ public class UsuarioFirebase {
         return usuario.getCurrentUser();
     }
 
-    public static String getIdentficadorUsuario(){
+    public static String getIdentficadorUsuario() {
         return getUsuarioAtual().getUid();
     }
 
@@ -76,7 +80,8 @@ public class UsuarioFirebase {
         }
     }
 
-    public static Usuario getDadosUsuarioLogado(){
+    /*public static Usuario getDadosUsuarioLogado() {
+
 
         FirebaseUser firebaseUser = getUsuarioAtual();
 
@@ -86,12 +91,12 @@ public class UsuarioFirebase {
         usuario.setTelefone(firebaseUser.getPhoneNumber());
         usuario.setIdUsuario(firebaseUser.getUid());
 
-        if(firebaseUser.getPhotoUrl() == null){
+        if (firebaseUser.getPhotoUrl() == null) {
             usuario.setCaminhoFoto("");
-        }else{
+        } else {
             usuario.setCaminhoFoto(firebaseUser.getPhotoUrl().toString());
         }
 
         return usuario;
-    }
+    }*/
 }

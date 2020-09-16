@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,7 +25,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -38,9 +44,10 @@ public class EditarPerfilActivity extends AppCompatActivity {
     private TextView textAlterarFoto;
     private TextInputEditText editNomePerfil, editCepPerfil, editTelefonePerfil, editEmailPerfil;
     private Button buttonSalvarAlteracoes;
-    private Usuario usuarioLogado;
     private static final int SELECAO_GALERIA = 200;
     private StorageReference storageRef;
+    private Usuario usuario;
+    private  DatabaseReference firebaseRef;
     private String identificadorUsuario;
 
     @Override
@@ -49,8 +56,8 @@ public class EditarPerfilActivity extends AppCompatActivity {
         setContentView(R.layout.activity_editar_perfil);
 
         //configurações iniciais
-        usuarioLogado = UsuarioFirebase.getDadosUsuarioLogado();
         storageRef = ConfiguracaoFirebase.getFirebaseStorage();
+        firebaseRef = ConfiguracaoFirebase.getFirebaseDataBase();
         identificadorUsuario = UsuarioFirebase.getIdentficadorUsuario();
 
         //Configuração toolbar
@@ -65,31 +72,60 @@ public class EditarPerfilActivity extends AppCompatActivity {
         inicializarComponentes();
 
         //recuperar dados do usuario.
-        FirebaseUser usuarioPerfil = UsuarioFirebase.getUsuarioAtual();
-        editNomePerfil.setText(usuarioPerfil.getDisplayName());
-        editTelefonePerfil.setText(usuarioPerfil.getPhoneNumber());
-        editEmailPerfil.setText(usuarioPerfil.getEmail());
-        Uri url = usuarioPerfil.getPhotoUrl();
-        if(url != null){
-            Glide.with(EditarPerfilActivity.this)
-                    .load(url)
-                    .into(imageEditarPerfil);
-        }else{
-            imageEditarPerfil.setImageResource(R.drawable.avatar);
-        }
+        DatabaseReference databaseReference = firebaseRef
+                .child("usuarios")
+                .child("cliente")
+                .child(identificadorUsuario);
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue() != null){
+                    usuario = dataSnapshot.getValue(Usuario.class);
+                    editNomePerfil.setText(usuario.getNome());
+                    editCepPerfil.setText(usuario.getCEP());
+                    editEmailPerfil.setText(usuario.getEmail());
+                    editTelefonePerfil.setText(usuario.getTelefone());
+
+                    String foto = usuario.getCaminhoFoto();
+                    if (foto != null) {
+                        Glide.with(EditarPerfilActivity.this)
+                                .load(foto)
+                                .into(imageEditarPerfil);
+                    } else {
+                        imageEditarPerfil.setImageResource(R.drawable.avatar);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         //salvar alterações de nome
         buttonSalvarAlteracoes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String nomeAtualizado = editNomePerfil.getText().toString();
+
+                String nome = editNomePerfil.getText().toString();
+                String cep = editCepPerfil.getText().toString();
+                String telefone = editTelefonePerfil.getText().toString();
+                String email = editEmailPerfil.getText().toString();
 
                 //atualizar nome no perfil.
-                UsuarioFirebase.atualizarNomeUsuario(nomeAtualizado);
+                //UsuarioFirebase.atualizarNomeUsuario(nome);
 
-                //atualizar nome no banco de dados.
-                usuarioLogado.setNome(nomeAtualizado);
-                usuarioLogado.atualizar();
+                Usuario usuario = new Usuario();
+                usuario.setNome(nome);
+                usuario.setCEP(cep);
+                usuario.setTelefone(telefone);
+                usuario.setEmail(email);
+
+                //atualizar no banco de dados.
+                usuario.atualizar();
 
                 Toast.makeText(EditarPerfilActivity.this,
                         "Dados alterados com Sucesso",
@@ -177,13 +213,13 @@ public class EditarPerfilActivity extends AppCompatActivity {
         }
     }
 
-    private void atualizarFotoUsuario(Uri url){
+    private void atualizarFotoUsuario(Uri url) {
         //Atualizar foto no perfil
         UsuarioFirebase.atualizarFotoUsuario(url);
 
         //Atualizar foto no Firebase
-        usuarioLogado.setCaminhoFoto(url.toString());
-        usuarioLogado.atualizar();
+        usuario.setCaminhoFoto(url.toString());
+        usuario.atualizar();
         Toast.makeText(EditarPerfilActivity.this,
                 "Sua foto foi atualizada!",
                 Toast.LENGTH_SHORT).show();
@@ -202,8 +238,43 @@ public class EditarPerfilActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-
         finish();
         return false;
     }
+
+    /*public void recuperarDados() {
+
+        final DatabaseReference databaseReference = firebaseRef
+                .child("usuarios")
+                .child("cliente")
+                .child(identificadorUsuario);
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue() != null){
+                    Usuario usuario = dataSnapshot.getValue(Usuario.class);
+                    editNomePerfil.setText(usuario.getNome());
+                    editCepPerfil.setText(usuario.getCEP());
+                    editEmailPerfil.setText(usuario.getEmail());
+                    editTelefonePerfil.setText(usuario.getTelefone());
+
+                    String foto = usuario.getCaminhoFoto();
+                    if (foto != null) {
+                        Glide.with(EditarPerfilActivity.this)
+                                .load(foto)
+                                .into(imageEditarPerfil);
+                    } else {
+                        imageEditarPerfil.setImageResource(R.drawable.avatar);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }*/
 }
