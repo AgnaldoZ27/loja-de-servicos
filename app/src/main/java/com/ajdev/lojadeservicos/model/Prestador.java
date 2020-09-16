@@ -10,13 +10,17 @@ import java.util.Map;
 public class Prestador extends Usuario implements Serializable {
 
     private String CPF_CNPJ;
+    private String categoria;
+    private String descricao;
 
     public Prestador() {
     }
 
-    public Prestador(String idUsuario, String tipoCadastro, String nome, String CEP, String telefone, String email, String senha, String caminhoFoto, String CPF_CNPJ) {
+    public Prestador(String idUsuario, String tipoCadastro, String nome, String CEP, String telefone, String email, String senha, String caminhoFoto, String CPF_CNPJ, String categoria, String descricao) {
         super(idUsuario, tipoCadastro, nome, CEP, telefone, email, senha, caminhoFoto);
         this.CPF_CNPJ = CPF_CNPJ;
+        this.categoria = categoria;
+        this.descricao = descricao;
     }
 
     public void salvarPrestador() {
@@ -45,6 +49,8 @@ public class Prestador extends Usuario implements Serializable {
         usuarioMap.put("nome", getNome());
         usuarioMap.put("telefone", getTelefone());
         usuarioMap.put("CPF_CNPJ", getCPF_CNPJ());
+        usuarioMap.put("categoria", getCategoria());
+        usuarioMap.put("descricao", getDescricao());
         usuarioMap.put("idPrestador", getIdUsuario());
         usuarioMap.put("caminhoFoto", getCaminhoFoto());
 
@@ -57,6 +63,22 @@ public class Prestador extends Usuario implements Serializable {
 
     public void setCPF_CNPJ(String CPF_CNPJ) {
         this.CPF_CNPJ = CPF_CNPJ;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 }
 

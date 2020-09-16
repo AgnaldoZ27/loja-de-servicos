@@ -40,7 +40,8 @@ public class AdapterPesquisa extends RecyclerView.Adapter<AdapterPesquisa.MyView
         Prestador usuario = listaUsuario.get(position);
 
         holder.nome.setText(usuario.getNome());
-        if(usuario.getCaminhoFoto() != null){
+        String foto = usuario.getCaminhoFoto();
+        if(foto != null){
             Uri uri = Uri.parse(usuario.getCaminhoFoto());
             Glide.with(context).load(uri).into(holder.foto);
         }else{

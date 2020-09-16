@@ -56,43 +56,56 @@ public class CadastroActivity extends AppCompatActivity {
                 //validar campos
                 if (!tipoCadastro.isEmpty()) {
                     if (!textoNome.isEmpty()) {
-                        if (!textoEmail.isEmpty()) {
-                            if (!textoSenha.isEmpty()) {
+                        if (!textoCep.isEmpty()) {
+                            if (!textoTelefone.isEmpty()) {
+                                if (!textoEmail.isEmpty()) {
+                                    if (!textoSenha.isEmpty()) {
 
-                                switch (tipoCadastro) {
-                                    case "CLIENTE":
-                                        usuario = new Usuario();
-                                        usuario.setTipoCadastro(tipoCadastro);
-                                        usuario.setNome(textoNome);
-                                        usuario.setCEP(textoCep);
-                                        usuario.setTelefone(textoTelefone);
-                                        usuario.setEmail(textoEmail);
-                                        usuario.setSenha(textoSenha);
-                                        cadastrarUsuario();
-                                        break;
-                                    case "PRESTADOR":
-                                        prestador = new Prestador();
-                                        prestador.setTipoCadastro(tipoCadastro);
-                                        prestador.setNome(textoNome);
-                                        prestador.setCEP(textoCep);
-                                        prestador.setTelefone(textoTelefone);
-                                        prestador.setEmail(textoEmail);
-                                        prestador.setSenha(textoSenha);
-                                        cadastrarPrestador();
-                                        break;
+                                        switch (tipoCadastro) {
+                                            case "CLIENTE":
+                                                usuario = new Usuario();
+                                                usuario.setTipoCadastro(tipoCadastro);
+                                                usuario.setNome(textoNome);
+                                                usuario.setCEP(textoCep);
+                                                usuario.setTelefone(textoTelefone);
+                                                usuario.setEmail(textoEmail);
+                                                usuario.setSenha(textoSenha);
+                                                cadastrarUsuario();
+                                                break;
+                                            case "PRESTADOR":
+                                                prestador = new Prestador();
+                                                prestador.setTipoCadastro(tipoCadastro);
+                                                prestador.setNome(textoNome);
+                                                prestador.setCEP(textoCep);
+                                                prestador.setTelefone(textoTelefone);
+                                                prestador.setEmail(textoEmail);
+                                                prestador.setSenha(textoSenha);
+                                                cadastrarPrestador();
+                                                break;
+                                        }
+
+
+                                    } else {
+                                        Toast.makeText(CadastroActivity.this,
+                                                "Preencha o campo senha!",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    Toast.makeText(CadastroActivity.this,
+                                            "Preencha o campo email!",
+                                            Toast.LENGTH_SHORT).show();
                                 }
-
-
                             } else {
                                 Toast.makeText(CadastroActivity.this,
-                                        "Preencha o campo senha!",
+                                        "Preencha o campo telefone!",
                                         Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             Toast.makeText(CadastroActivity.this,
-                                    "Preencha o campo email!",
+                                    "Preencha o campo CEP!",
                                     Toast.LENGTH_SHORT).show();
                         }
+
                     } else {
                         Toast.makeText(CadastroActivity.this,
                                 "Preencha o campo nome!",

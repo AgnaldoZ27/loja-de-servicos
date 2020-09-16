@@ -37,16 +37,15 @@
             android:paddingRight="6dp">
 
             <EditText
-                android:id="@+id/editTextTextPersonName"
+                android:id="@+id/editTextMensagem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Name" />
+                android:inputType="textPersonName" />
 
             <ImageView
-                android:id="@+id/imageView7"
+                android:id="@+id/imageViewCamera"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/ic__camera_cinza" />
@@ -59,6 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
             android:clickable="true"
+            android:onClick="enviarMensagem"
             android:src="@drawable/ic_send" />
 
     </LinearLayout>
