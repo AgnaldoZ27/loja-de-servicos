@@ -97,6 +97,34 @@ public class EditarPerfilActivity extends AppCompatActivity {
                     }
 
                 }
+                
+                //salvar alterações de nome
+                buttonSalvarAlteracoes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        String nome = editNomePerfil.getText().toString();
+                        String cep = editCepPerfil.getText().toString();
+                        String telefone = editTelefonePerfil.getText().toString();
+                        String email = editEmailPerfil.getText().toString();
+
+                        //atualizar nome no perfil.
+                        //UsuarioFirebase.atualizarNomeUsuario(nome);
+
+                        usuario.setNome(nome);
+                        usuario.setCEP(cep);
+                        usuario.setTelefone(telefone);
+                        usuario.setEmail(email);
+
+                        //atualizar no banco de dados.
+                        usuario.atualizar();
+
+                        Toast.makeText(EditarPerfilActivity.this,
+                                "Dados alterados com Sucesso",
+                                Toast.LENGTH_SHORT).show();
+
+                    }
+                });
             }
 
             @Override
@@ -105,7 +133,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
             }
         });
 
-        //salvar alterações de nome
+        /*//salvar alterações de nome
         buttonSalvarAlteracoes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,7 +171,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
                     startActivityForResult(i, SELECAO_GALERIA);
                 }
             }
-        });
+        });*/
 
     }
 
