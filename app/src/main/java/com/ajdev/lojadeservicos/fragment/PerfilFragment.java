@@ -3,18 +3,25 @@ package com.ajdev.lojadeservicos.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ajdev.lojadeservicos.R;
 import com.ajdev.lojadeservicos.activity.EditarPerfilActivity;
+import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
+import com.ajdev.lojadeservicos.helper.UsuarioFirebase;
+import com.ajdev.lojadeservicos.model.Usuario;
+import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -25,11 +32,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class PerfilFragment extends Fragment {
 
-    private ProgressBar progressBar;
     private CircleImageView imagePerfil;
-    public GridView gridViewPerfil;
-    private TextView textProfissao;
+    private TextView nomePerfil, telefonePerfil, emailPerfil, cepPerfil;
     private Button buttonAcaoPerfil;
+    private DatabaseReference firebaseRef;
+    private String identificadorUsuario;
+    private Usuario usuario;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -78,12 +86,53 @@ public class PerfilFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
 
+        //Configurações iniciais
+        firebaseRef = ConfiguracaoFirebase.getFirebaseDataBase();
+        identificadorUsuario = UsuarioFirebase.getIdentficadorUsuario();
+
         //Configurações dos componentes
-        gridViewPerfil = view.findViewById(R.id.gridViewPerfil);
-        progressBar = view.findViewById(R.id.progressBarPerfil);
-        imagePerfil = view.findViewById(R.id.imageEditarPerfil);
-        textProfissao = view.findViewById(R.id.textProfissao);
-        buttonAcaoPerfil = view.findViewById(R.id.buttonEnviarMensagem);
+        imagePerfil = view.findViewById(R.id.imagePerfil);
+        nomePerfil = view.findViewById(R.id.editTextNomeCliente);
+        nomePerfil.setFocusable(false);
+        emailPerfil = view.findViewById(R.id.editTextEmailCliente);
+        emailPerfil.setFocusable(false);
+        telefonePerfil = view.findViewById(R.id.editTextTelefoneCliente);
+        telefonePerfil.setFocusable(false);
+        cepPerfil = view.findViewById(R.id.editTextCepCliente);
+        cepPerfil.setFocusable(false);
+        buttonAcaoPerfil = view.findViewById(R.id.buttonEditarPerfil);
+
+        //Recuperar informações do perfil
+        DatabaseReference databaseReference = firebaseRef
+                .child("usuarios")
+                .child("cliente")
+                .child(identificadorUsuario);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    usuario = dataSnapshot.getValue(Usuario.class);
+                    nomePerfil.setText(usuario.getNome());
+                    cepPerfil.setText(usuario.getCEP());
+                    emailPerfil.setText(usuario.getEmail());
+                    telefonePerfil.setText(usuario.getTelefone());
+
+                    String foto = usuario.getCaminhoFoto();
+                    if (foto != null) {
+                        Glide.with(PerfilFragment.this)
+                                .load(foto)
+                                .into(imagePerfil);
+                    } else {
+                        imagePerfil.setImageResource(R.drawable.avatar);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         //Abre edição de perfil
         buttonAcaoPerfil.setOnClickListener(new View.OnClickListener() {
@@ -98,4 +147,5 @@ public class PerfilFragment extends Fragment {
         return view;
 
     }
+
 }

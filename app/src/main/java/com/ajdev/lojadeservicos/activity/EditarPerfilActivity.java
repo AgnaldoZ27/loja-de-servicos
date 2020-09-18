@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -25,8 +24,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -133,46 +130,6 @@ public class EditarPerfilActivity extends AppCompatActivity {
             }
         });
 
-        /*//salvar alterações de nome
-        buttonSalvarAlteracoes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String nome = editNomePerfil.getText().toString();
-                String cep = editCepPerfil.getText().toString();
-                String telefone = editTelefonePerfil.getText().toString();
-                String email = editEmailPerfil.getText().toString();
-
-                //atualizar nome no perfil.
-                //UsuarioFirebase.atualizarNomeUsuario(nome);
-
-                Usuario usuario = new Usuario();
-                usuario.setNome(nome);
-                usuario.setCEP(cep);
-                usuario.setTelefone(telefone);
-                usuario.setEmail(email);
-
-                //atualizar no banco de dados.
-                usuario.atualizar();
-
-                Toast.makeText(EditarPerfilActivity.this,
-                        "Dados alterados com Sucesso",
-                        Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-        //Alterar foto de usuário.
-        textAlterarFoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                if (i.resolveActivity(getPackageManager()) != null) {
-                    startActivityForResult(i, SELECAO_GALERIA);
-                }
-            }
-        });*/
-
     }
 
     @Override
@@ -254,7 +211,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
     }
 
     public void inicializarComponentes() {
-        imageEditarPerfil = findViewById(R.id.imageEditarPerfil);
+        imageEditarPerfil = findViewById(R.id.imagePerfil);
         textAlterarFoto = findViewById(R.id.textAlterarFoto);
         editNomePerfil = findViewById(R.id.editAlterarNome);
         editCepPerfil = findViewById(R.id.editAlterarCep);
@@ -270,39 +227,4 @@ public class EditarPerfilActivity extends AppCompatActivity {
         return false;
     }
 
-    /*public void recuperarDados() {
-
-        final DatabaseReference databaseReference = firebaseRef
-                .child("usuarios")
-                .child("cliente")
-                .child(identificadorUsuario);
-
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getValue() != null){
-                    Usuario usuario = dataSnapshot.getValue(Usuario.class);
-                    editNomePerfil.setText(usuario.getNome());
-                    editCepPerfil.setText(usuario.getCEP());
-                    editEmailPerfil.setText(usuario.getEmail());
-                    editTelefonePerfil.setText(usuario.getTelefone());
-
-                    String foto = usuario.getCaminhoFoto();
-                    if (foto != null) {
-                        Glide.with(EditarPerfilActivity.this)
-                                .load(foto)
-                                .into(imageEditarPerfil);
-                    } else {
-                        imageEditarPerfil.setImageResource(R.drawable.avatar);
-                    }
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }*/
 }

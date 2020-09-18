@@ -72,31 +72,30 @@ public class PrincipalActivity extends AppCompatActivity {
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                switch (menuItem.getItemId()) {
-                    case R.id.ic_home:
-                        fragmentTransaction.replace(R.id.viewPager, new HomeFragment()).commit();
-                        return true;
-                }
-                switch (menuItem.getItemId()) {
-                    case R.id.ic_pesquisa:
-                        fragmentTransaction.replace(R.id.viewPager, new PesquisaFragment()).commit();
-                        return true;
-                }
-                switch (menuItem.getItemId()) {
-                    case R.id.ic_mensagem:
-                        fragmentTransaction.replace(R.id.viewPager, new MensagemFragment()).commit();
-                        return true;
-                }
-                switch (menuItem.getItemId()) {
-                    case R.id.ic_perfil:
-                        fragmentTransaction.replace(R.id.viewPager, new PerfilFragment()).commit();
-                        return true;
-                }
-
+                    switch (menuItem.getItemId()) {
+                        case R.id.ic_home:
+                            fragmentTransaction.replace(R.id.viewPager, new HomeFragment()).commit();
+                            return true;
+                    }
+                    switch (menuItem.getItemId()) {
+                        case R.id.ic_pesquisa:
+                            fragmentTransaction.replace(R.id.viewPager, new PesquisaFragment()).commit();
+                            return true;
+                    }
+                    switch (menuItem.getItemId()) {
+                        case R.id.ic_mensagem:
+                            fragmentTransaction.replace(R.id.viewPager, new MensagemFragment()).commit();
+                            return true;
+                    }
+                    switch (menuItem.getItemId()) {
+                        case R.id.ic_perfil:
+                            fragmentTransaction.replace(R.id.viewPager, new PerfilFragment()).commit();
+                            return true;
+                    }
                 return false;
             }
         });
+
     }
 
     @Override

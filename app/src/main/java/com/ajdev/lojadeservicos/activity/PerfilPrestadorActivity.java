@@ -22,7 +22,7 @@ public class PerfilPrestadorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_perfil_prestador);
 
         //Inicializar Componenetes
-        buttonAcaoPerfil = findViewById(R.id.buttonEnviarMensagem);
+        buttonAcaoPerfil = findViewById(R.id.buttonEditarPerfil);
         buttonAcaoPerfil.setText("Enviar Mensagem");
 
         //Configurar toolbar
