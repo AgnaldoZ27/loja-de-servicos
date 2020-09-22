@@ -2,7 +2,6 @@ package com.ajdev.lojadeservicos.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,6 @@ import com.ajdev.lojadeservicos.activity.PerfilPrestadorActivity;
 import com.ajdev.lojadeservicos.adapter.AdapterPesquisa;
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
 import com.ajdev.lojadeservicos.helper.RecyclerItemClickListener;
-import com.ajdev.lojadeservicos.model.Prestador;
 import com.ajdev.lojadeservicos.model.Usuario;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,7 +39,7 @@ public class PesquisaFragment extends Fragment {
     private SearchView searchViewPesquisa;
     private RecyclerView recyclerViewPesquisa;
 
-    private List<Prestador> listaUsuario;
+    private List<Usuario> listaUsuario;
     private DatabaseReference usuarioRef;
     private AdapterPesquisa adapterPesquisa;
 
@@ -97,8 +95,7 @@ public class PesquisaFragment extends Fragment {
         //Configurações iniciais
         listaUsuario = new ArrayList<>();
         usuarioRef = ConfiguracaoFirebase.getFirebaseDataBase()
-                .child("usuarios")
-                .child("prestador");
+                .child("usuarios");
 
         //Configura RecyclerView
         recyclerViewPesquisa.setHasFixedSize(true);
@@ -113,7 +110,7 @@ public class PesquisaFragment extends Fragment {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Prestador usuarioSelecionado = listaUsuario.get(position);
+                        Usuario usuarioSelecionado = listaUsuario.get(position);
                         Intent i = new Intent(getActivity(), PerfilPrestadorActivity.class);
                         i.putExtra("prestadorSelecionado", usuarioSelecionado);
                         startActivity(i);
@@ -159,7 +156,7 @@ public class PesquisaFragment extends Fragment {
 
         //pesquisa usuários caso tenha texto na pesquisa
         if (texto.length() >= 3) {
-            Query query = usuarioRef.orderByChild("tipoCadastro")
+            Query query = usuarioRef.orderByChild("categoria")
                     .startAt(texto)
                     .endAt(texto + "\uf8ff");
             query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -169,7 +166,7 @@ public class PesquisaFragment extends Fragment {
                     listaUsuario.clear();
 
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        listaUsuario.add(ds.getValue(Prestador.class));
+                        listaUsuario.add(ds.getValue(Usuario.class));
                     }
 
                     adapterPesquisa.notifyDataSetChanged();

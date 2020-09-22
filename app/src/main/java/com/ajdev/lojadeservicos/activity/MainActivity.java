@@ -27,8 +27,6 @@ public class MainActivity extends IntroActivity {
                 .fragment(R.layout.intro_cadastro)
                 .canGoForward(false)
                 .build());
-
-
     }
 
     @Override
@@ -41,8 +39,8 @@ public class MainActivity extends IntroActivity {
         startActivity(new Intent(this, LoginActivity.class));
     }
 
-    public void btCadastrar(View view) {
-        startActivity(new Intent(this, CadastroActivity.class));
+       public void btCadastrar(View view) {
+        startActivity(new Intent(this, SelecaoCadastroActivity.class));
     }
 
     public void verificarUsuarioLogado() {

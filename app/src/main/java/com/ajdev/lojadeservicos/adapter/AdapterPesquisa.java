@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ajdev.lojadeservicos.R;
-import com.ajdev.lojadeservicos.model.Prestador;
+import com.ajdev.lojadeservicos.model.Usuario;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -20,10 +20,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AdapterPesquisa extends RecyclerView.Adapter<AdapterPesquisa.MyViewHolder> {
 
-    private List<Prestador> listaUsuario;
+    private List<Usuario> listaUsuario;
     private Context context;
 
-    public AdapterPesquisa(List<Prestador> l, Context c) {
+    public AdapterPesquisa(List<Usuario> l, Context c) {
         this.listaUsuario = l;
         this.context = c;
     }
@@ -37,7 +37,7 @@ public class AdapterPesquisa extends RecyclerView.Adapter<AdapterPesquisa.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Prestador usuario = listaUsuario.get(position);
+        Usuario usuario = listaUsuario.get(position);
 
         holder.nome.setText(usuario.getNome());
         String foto = usuario.getCaminhoFoto();

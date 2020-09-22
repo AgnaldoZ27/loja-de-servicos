@@ -9,11 +9,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.ajdev.lojadeservicos.R;
-import com.ajdev.lojadeservicos.model.Prestador;
+import com.ajdev.lojadeservicos.model.Usuario;
 
 public class PerfilPrestadorActivity extends AppCompatActivity {
 
-    private Prestador usuarioSelecionado;
+    private Usuario usuarioSelecionado;
     private Button buttonAcaoPerfil;
 
     @Override
@@ -36,7 +36,7 @@ public class PerfilPrestadorActivity extends AppCompatActivity {
         //Recuperar usuario selecionadao
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
-            usuarioSelecionado = (Prestador) bundle.getSerializable("prestadorSelecionado");
+            usuarioSelecionado = (Usuario) bundle.getSerializable("prestadorSelecionado");
 
             //Configura nome do usuário na toolbar
             getSupportActionBar().setTitle(usuarioSelecionado.getNome());

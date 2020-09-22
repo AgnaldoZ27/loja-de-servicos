@@ -14,7 +14,7 @@ import com.ajdev.lojadeservicos.R;
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
 import com.ajdev.lojadeservicos.helper.UsuarioFirebase;
 import com.ajdev.lojadeservicos.model.Mensagem;
-import com.ajdev.lojadeservicos.model.Prestador;
+import com.ajdev.lojadeservicos.model.Usuario;
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
 
@@ -24,7 +24,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private TextView textViewNome;
     private CircleImageView circleImageViewFoto;
-    private Prestador usuarioSelecionado;
+    private Usuario usuarioSelecionado;
     private EditText editMensagem;
 
     //Identificador usuarios remetente e destinatarios
@@ -55,7 +55,7 @@ public class ChatActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
 
-            usuarioSelecionado = (Prestador) bundle.getSerializable("chatMensagem");
+            usuarioSelecionado = (Usuario) bundle.getSerializable("chatMensagem");
             textViewNome.setText(usuarioSelecionado.getNome());
             String foto = usuarioSelecionado.getCaminhoFoto();
             if (foto != null) {

@@ -71,7 +71,6 @@ public class EditarPerfilActivity extends AppCompatActivity {
         //recuperar dados do usuario.
         DatabaseReference databaseReference = firebaseRef
                 .child("usuarios")
-                .child("cliente")
                 .child(identificadorUsuario);
 
         databaseReference.addValueEventListener(new ValueEventListener() {

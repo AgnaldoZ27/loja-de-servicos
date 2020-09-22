@@ -33,7 +33,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class PerfilFragment extends Fragment {
 
     private CircleImageView imagePerfil;
-    private TextView nomePerfil, telefonePerfil, emailPerfil, cepPerfil;
+    private TextView nomePerfil, telefonePerfil, emailPerfil, cepPerfil, atuacaoPerfil, descricaoPerfil;
     private Button buttonAcaoPerfil;
     private DatabaseReference firebaseRef;
     private String identificadorUsuario;
@@ -92,30 +92,37 @@ public class PerfilFragment extends Fragment {
 
         //Configurações dos componentes
         imagePerfil = view.findViewById(R.id.imagePerfil);
-        nomePerfil = view.findViewById(R.id.editTextNomeCliente);
-        nomePerfil.setFocusable(false);
-        emailPerfil = view.findViewById(R.id.editTextEmailCliente);
-        emailPerfil.setFocusable(false);
-        telefonePerfil = view.findViewById(R.id.editTextTelefoneCliente);
-        telefonePerfil.setFocusable(false);
-        cepPerfil = view.findViewById(R.id.editTextCepCliente);
-        cepPerfil.setFocusable(false);
+        nomePerfil = view.findViewById(R.id.textViewNomePerfil);
+        emailPerfil = view.findViewById(R.id.textViewEmailPerfil);
+        telefonePerfil = view.findViewById(R.id.textViewTelefonePerfil);
+        cepPerfil = view.findViewById(R.id.textViewCepPerfil);
+        atuacaoPerfil = view.findViewById(R.id.textViewAtuacaoPerfil);
+        descricaoPerfil = view.findViewById(R.id.textViewDescricaoPerfil);
+
         buttonAcaoPerfil = view.findViewById(R.id.buttonEditarPerfil);
 
         //Recuperar informações do perfil
         DatabaseReference databaseReference = firebaseRef
                 .child("usuarios")
-                .child("cliente")
                 .child(identificadorUsuario);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
+
                     usuario = dataSnapshot.getValue(Usuario.class);
+
                     nomePerfil.setText(usuario.getNome());
                     cepPerfil.setText(usuario.getCEP());
                     emailPerfil.setText(usuario.getEmail());
                     telefonePerfil.setText(usuario.getTelefone());
+                    String tipo = usuario.getTipoCadastro();
+                    if (tipo.equals("PRESTADOR")) {
+                        atuacaoPerfil.setVisibility(View.VISIBLE);
+                        atuacaoPerfil.setText(usuario.getCategoria());
+                        descricaoPerfil.setVisibility(View.VISIBLE);
+                        descricaoPerfil.setText(usuario.getDescricao());
+                    }
 
                     String foto = usuario.getCaminhoFoto();
                     if (foto != null) {
@@ -126,6 +133,7 @@ public class PerfilFragment extends Fragment {
                         imagePerfil.setImageResource(R.drawable.avatar);
                     }
                 }
+
             }
 
             @Override

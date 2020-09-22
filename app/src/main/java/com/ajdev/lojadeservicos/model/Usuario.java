@@ -18,6 +18,9 @@ public class Usuario implements Serializable {
     private String email;
     private String senha;
     private String caminhoFoto;
+    private String CPF_CNPJ;
+    private String categoria;
+    private String descricao;
 
     public Usuario() {
 
@@ -26,7 +29,6 @@ public class Usuario implements Serializable {
     public void salvar() {
         DatabaseReference firebase = ConfiguracaoFirebase.getFirebaseDataBase();
         firebase.child("usuarios")
-                .child("cliente")
                 .child(this.idUsuario)
                 .setValue(this);
     }
@@ -35,7 +37,6 @@ public class Usuario implements Serializable {
         DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebaseDataBase();
         DatabaseReference usuarioRef = firebaseRef
                 .child("usuarios")
-                .child("cliente")
                 .child(getIdUsuario());
 
         Map<String, Object> valoresUsuario = convertParaMap();
@@ -51,11 +52,14 @@ public class Usuario implements Serializable {
         usuarioMap.put("telefone", getTelefone());
         usuarioMap.put("idUsuario", getIdUsuario());
         usuarioMap.put("caminhoFoto", getCaminhoFoto());
+        usuarioMap.put("CPF_CNPJ", getCPF_CNPJ());
+        usuarioMap.put("categoria", getCategoria());
+        usuarioMap.put("descricao", getDescricao());
 
         return usuarioMap;
     }
 
-    public Usuario(String idUsuario, String tipoCadastro, String nome, String CEP, String telefone, String email, String senha, String caminhoFoto) {
+    public Usuario(String idUsuario, String tipoCadastro, String nome, String CEP, String telefone, String email, String senha, String caminhoFoto, String CPF_CNPJ, String categoria, String descricao) {
         this.idUsuario = idUsuario;
         this.tipoCadastro = tipoCadastro;
         this.nome = nome;
@@ -64,7 +68,11 @@ public class Usuario implements Serializable {
         this.email = email;
         this.senha = senha;
         this.caminhoFoto = caminhoFoto;
+        this.CPF_CNPJ = CPF_CNPJ;
+        this.categoria = categoria;
+        this.descricao = descricao;
     }
+
 
     public String getIdUsuario() {
         return idUsuario;
@@ -74,7 +82,6 @@ public class Usuario implements Serializable {
         this.idUsuario = idUsuario;
     }
 
-    @Exclude
     public String getTipoCadastro() {
         return tipoCadastro;
     }
@@ -131,5 +138,29 @@ public class Usuario implements Serializable {
 
     public void setCaminhoFoto(String caminhoFoto) {
         this.caminhoFoto = caminhoFoto;
+    }
+
+    public String getCPF_CNPJ() {
+        return CPF_CNPJ;
+    }
+
+    public void setCPF_CNPJ(String CPF_CNPJ) {
+        this.CPF_CNPJ = CPF_CNPJ;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 }
