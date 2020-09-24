@@ -3,30 +3,50 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:paddingLeft="16dp"
     android:paddingTop="8dp"
     android:paddingRight="16dp"
     android:paddingBottom="8dp">
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageFotoPesquisa"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/avatar" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imageFotoPesquisa"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/avatar" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/textNomePesquisa"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center|left"
             android:paddingLeft="10dp"
-            android:text="Nome do Usuário" />
+            android:text="Nome"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textCategoriaPesquisa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center|left"
+            android:paddingLeft="10dp"
+            android:text="Categoria" />
+
+        <TextView
+            android:id="@+id/textAtuacaoPesquisa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center|left"
+            android:paddingLeft="10dp"
+            android:text="Atuacao" />
+
     </LinearLayout>
+
 </LinearLayout>

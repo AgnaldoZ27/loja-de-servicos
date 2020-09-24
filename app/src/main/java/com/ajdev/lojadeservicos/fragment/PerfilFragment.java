@@ -33,7 +33,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class PerfilFragment extends Fragment {
 
     private CircleImageView imagePerfil;
-    private TextView nomePerfil, telefonePerfil, emailPerfil, cepPerfil, atuacaoPerfil, descricaoPerfil;
+    private TextView nomePerfil, telefonePerfil, emailPerfil, cepPerfil, categoriaPerfil, atuacaoPerfil, descricaoPerfil;
     private Button buttonAcaoPerfil;
     private DatabaseReference firebaseRef;
     private String identificadorUsuario;
@@ -96,6 +96,7 @@ public class PerfilFragment extends Fragment {
         emailPerfil = view.findViewById(R.id.textViewEmailPerfil);
         telefonePerfil = view.findViewById(R.id.textViewTelefonePerfil);
         cepPerfil = view.findViewById(R.id.textViewCepPerfil);
+        categoriaPerfil = view.findViewById(R.id.textViewCategoriaPerfil);
         atuacaoPerfil = view.findViewById(R.id.textViewAtuacaoPerfil);
         descricaoPerfil = view.findViewById(R.id.textViewDescricaoPerfil);
 
@@ -118,8 +119,10 @@ public class PerfilFragment extends Fragment {
                     telefonePerfil.setText(usuario.getTelefone());
                     String tipo = usuario.getTipoCadastro();
                     if (tipo.equals("PRESTADOR")) {
+                        categoriaPerfil.setVisibility(View.VISIBLE);
+                        categoriaPerfil.setText(usuario.getCategoria());
                         atuacaoPerfil.setVisibility(View.VISIBLE);
-                        atuacaoPerfil.setText(usuario.getCategoria());
+                        atuacaoPerfil.setText(usuario.getAtuacao());
                         descricaoPerfil.setVisibility(View.VISIBLE);
                         descricaoPerfil.setText(usuario.getDescricao());
                     }

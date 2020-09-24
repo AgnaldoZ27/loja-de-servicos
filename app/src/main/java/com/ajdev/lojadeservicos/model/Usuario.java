@@ -20,6 +20,7 @@ public class Usuario implements Serializable {
     private String caminhoFoto;
     private String CPF_CNPJ;
     private String categoria;
+    private String atuacao;
     private String descricao;
 
     public Usuario() {
@@ -54,12 +55,13 @@ public class Usuario implements Serializable {
         usuarioMap.put("caminhoFoto", getCaminhoFoto());
         usuarioMap.put("CPF_CNPJ", getCPF_CNPJ());
         usuarioMap.put("categoria", getCategoria());
+        usuarioMap.put("atuacao", getAtuacao());
         usuarioMap.put("descricao", getDescricao());
 
         return usuarioMap;
     }
 
-    public Usuario(String idUsuario, String tipoCadastro, String nome, String CEP, String telefone, String email, String senha, String caminhoFoto, String CPF_CNPJ, String categoria, String descricao) {
+    public Usuario(String idUsuario, String tipoCadastro, String nome, String CEP, String telefone, String email, String senha, String caminhoFoto, String CPF_CNPJ, String categoria, String atuacao, String descricao) {
         this.idUsuario = idUsuario;
         this.tipoCadastro = tipoCadastro;
         this.nome = nome;
@@ -70,6 +72,7 @@ public class Usuario implements Serializable {
         this.caminhoFoto = caminhoFoto;
         this.CPF_CNPJ = CPF_CNPJ;
         this.categoria = categoria;
+        this.atuacao = atuacao;
         this.descricao = descricao;
     }
 
@@ -154,6 +157,14 @@ public class Usuario implements Serializable {
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
+    }
+
+    public String getAtuacao() {
+        return atuacao;
+    }
+
+    public void setAtuacao(String atuacao) {
+        this.atuacao = atuacao;
     }
 
     public String getDescricao() {

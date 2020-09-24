@@ -40,6 +40,10 @@ public class AdapterPesquisa extends RecyclerView.Adapter<AdapterPesquisa.MyView
         Usuario usuario = listaUsuario.get(position);
 
         holder.nome.setText(usuario.getNome());
+        holder.categoria.setText(usuario.getCategoria());
+        holder.atuacao.setText(usuario.getAtuacao());
+
+        //Configuração de foto
         String foto = usuario.getCaminhoFoto();
         if(foto != null){
             Uri uri = Uri.parse(usuario.getCaminhoFoto());
@@ -57,7 +61,7 @@ public class AdapterPesquisa extends RecyclerView.Adapter<AdapterPesquisa.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         CircleImageView foto;
-        TextView nome;
+        TextView nome, categoria, atuacao;
 
 
         public MyViewHolder(@NonNull View itemView) {
@@ -65,6 +69,9 @@ public class AdapterPesquisa extends RecyclerView.Adapter<AdapterPesquisa.MyView
 
             foto = itemView.findViewById(R.id.imageFotoPesquisa);
             nome = itemView.findViewById(R.id.textNomePesquisa);
+            categoria = itemView.findViewById(R.id.textCategoriaPesquisa);
+            atuacao = itemView.findViewById(R.id.textAtuacaoPesquisa);
+
         }
     }
 }

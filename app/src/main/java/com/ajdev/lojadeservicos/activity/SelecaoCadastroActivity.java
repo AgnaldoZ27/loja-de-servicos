@@ -14,12 +14,15 @@ public class SelecaoCadastroActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selecao_tipo_cadastro);
+
     }
     public void btCliente(View view) {
         startActivity(new Intent(this, CadastroActivity.class));
+        finish();
     }
 
     public void btPrestador(View view) {
         startActivity(new Intent(this, CadastroPrestadorActivity.class));
+        finish();
     }
 }

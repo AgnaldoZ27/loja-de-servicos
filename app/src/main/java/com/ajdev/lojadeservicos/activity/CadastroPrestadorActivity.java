@@ -24,7 +24,7 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
 public class CadastroPrestadorActivity extends AppCompatActivity {
 
-    private EditText campoNome, campoCep, campoTelefone, campoEmail, campoSenha, campoCategoria, campoDescricao;
+    private EditText campoNome, campoCep, campoTelefone, campoEmail, campoSenha, campoCategoria, campoAtuacao, campoDescricao;
     private Button botaoCadastrar;
     private FirebaseAuth autenticacao;
     private Usuario usuario;
@@ -47,6 +47,7 @@ public class CadastroPrestadorActivity extends AppCompatActivity {
                 String textoCep = campoCep.getText().toString();
                 String textoTelefone = campoTelefone.getText().toString();
                 String textoCategoria = campoCategoria.getText().toString();
+                String textoAtuacao = campoAtuacao.getText().toString();
                 String textoDescricao = campoDescricao.getText().toString();
                 String textoEmail = campoEmail.getText().toString();
                 String textoSenha = campoSenha.getText().toString();
@@ -66,6 +67,7 @@ public class CadastroPrestadorActivity extends AppCompatActivity {
                                     usuario.setCEP(textoCep);
                                     usuario.setTelefone(textoTelefone);
                                     usuario.setCategoria(textoCategoria);
+                                    usuario.setAtuacao(textoAtuacao);
                                     usuario.setDescricao(textoDescricao);
                                     usuario.setEmail(textoEmail);
                                     usuario.setSenha(textoSenha);
@@ -156,6 +158,7 @@ public class CadastroPrestadorActivity extends AppCompatActivity {
         campoCep = findViewById(R.id.editCEP);
         campoTelefone = findViewById(R.id.editTelefone);
         campoCategoria = findViewById(R.id.editTextCategoria);
+        campoAtuacao = findViewById(R.id.editTextAtuacao);
         campoDescricao = findViewById(R.id.editTextDescricao);
         campoEmail = findViewById(R.id.editEmail);
         campoSenha = findViewById(R.id.editSenha);

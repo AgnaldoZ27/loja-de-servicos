@@ -4,16 +4,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.ajdev.lojadeservicos.R;
 import com.ajdev.lojadeservicos.model.Usuario;
+import com.bumptech.glide.Glide;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PerfilPrestadorActivity extends AppCompatActivity {
 
     private Usuario usuarioSelecionado;
+    private TextView nome, telefone, email, endereco, categoria, atuacao, descricao;
+    private CircleImageView fotoPerfil;
     private Button buttonAcaoPerfil;
 
     @Override
@@ -22,7 +28,7 @@ public class PerfilPrestadorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_perfil_prestador);
 
         //Inicializar Componenetes
-        buttonAcaoPerfil = findViewById(R.id.buttonEditarPerfil);
+        inicializarComponentes();
         buttonAcaoPerfil.setText("Enviar Mensagem");
 
         //Configurar toolbar
@@ -35,11 +41,33 @@ public class PerfilPrestadorActivity extends AppCompatActivity {
 
         //Recuperar usuario selecionadao
         Bundle bundle = getIntent().getExtras();
-        if(bundle != null){
+        if (bundle != null) {
             usuarioSelecionado = (Usuario) bundle.getSerializable("prestadorSelecionado");
 
             //Configura nome do usuário na toolbar
             getSupportActionBar().setTitle(usuarioSelecionado.getNome());
+
+            //Configura dados do usuario.
+            nome.setVisibility(View.GONE);
+            telefone.setText(usuarioSelecionado.getTelefone());
+            email.setText(usuarioSelecionado.getEmail());
+            endereco.setText(usuarioSelecionado.getCEP());
+            categoria.setVisibility(View.VISIBLE);
+            categoria.setText(usuarioSelecionado.getCategoria());
+            atuacao.setVisibility(View.VISIBLE);
+            atuacao.setText(usuarioSelecionado.getAtuacao());
+            descricao.setVisibility(View.VISIBLE);
+            descricao.setText(usuarioSelecionado.getDescricao());
+
+            //Configura foto de perfil
+            String foto = usuarioSelecionado.getCaminhoFoto();
+            if (foto != null) {
+                Glide.with(PerfilPrestadorActivity.this)
+                        .load(foto)
+                        .into(fotoPerfil);
+            } else {
+                fotoPerfil.setImageResource(R.drawable.avatar);
+            }
 
         }
 
@@ -54,17 +82,30 @@ public class PerfilPrestadorActivity extends AppCompatActivity {
 
     }
 
+    public void inicializarComponentes() {
+        buttonAcaoPerfil = findViewById(R.id.buttonEditarPerfil);
+        fotoPerfil = findViewById(R.id.imagePerfil);
+        nome = findViewById(R.id.textViewNomePerfil);
+        telefone = findViewById(R.id.textViewTelefonePerfil);
+        email = findViewById(R.id.textViewEmailPerfil);
+        endereco = findViewById(R.id.textViewCepPerfil);
+        categoria = findViewById(R.id.textViewCategoriaPerfil);
+        atuacao = findViewById(R.id.textViewAtuacaoPerfil);
+        descricao = findViewById(R.id.textViewDescricaoPerfil);
+
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         finish();
         return false;
     }
 
-    public void abrirTelaChat(){
+    public void abrirTelaChat() {
 
         Intent i = new Intent();
         i.putExtra("chatMensagem", usuarioSelecionado);
-        startActivity(new Intent (this, ChatActivity.class));
+        startActivity(new Intent(this, ChatActivity.class));
 
         finish();
     }

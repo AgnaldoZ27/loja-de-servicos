@@ -2,6 +2,7 @@ package com.ajdev.lojadeservicos.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -171,8 +172,8 @@ public class PesquisaFragment extends Fragment {
 
                     adapterPesquisa.notifyDataSetChanged();
 
-                   /*int total = listaUsuario.size();
-                    Log.i("totalUsuario", "total: "+ total);*/
+                   int total = listaUsuario.size();
+                    Log.i("totalUsuario", "total: "+ total);
                 }
 
                 @Override
