@@ -146,7 +146,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
-    <EditText
+    <com.santalu.maskara.widget.MaskEditText
         android:id="@+id/editCEP"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -161,6 +161,9 @@
         android:ems="10"
         android:hint="CEP"
         android:inputType="number"
+        app:mask="_____-___"
+        app:maskCharacter="_"
+        app:maskStyle="completable"
         android:padding="10dp"
         android:textColor="@android:color/white"
         android:textColorHint="@android:color/white"
@@ -169,7 +172,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editNome" />
 
-    <EditText
+    <com.santalu.maskara.widget.MaskEditText
         android:id="@+id/editTelefone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -184,6 +187,9 @@
         android:ems="10"
         android:hint="Telefone"
         android:inputType="phone"
+        app:mask="+55 (__) _____-____"
+        app:maskCharacter="_"
+        app:maskStyle="completable"
         android:padding="10dp"
         android:textColor="@android:color/white"
         android:textColorHint="@android:color/white"
