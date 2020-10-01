@@ -58,30 +58,48 @@ public class CadastroPrestadorActivity extends AppCompatActivity {
                 if (!textoNome.isEmpty()) {
                     if (!textoCep.isEmpty()) {
                         if (!textoTelefone.isEmpty()) {
-                            if (!textoEmail.isEmpty()) {
-                                if (!textoSenha.isEmpty()) {
+                            if (!textoCategoria.isEmpty()) {
+                                if (!textoAtuacao.isEmpty()) {
+                                    if (!textoDescricao.isEmpty()) {
+                                        if (!textoEmail.isEmpty()) {
+                                            if (!textoSenha.isEmpty()) {
 
-                                    usuario = new Usuario();
-                                    usuario.setTipoCadastro(tipoCadastro);
-                                    usuario.setNome(textoNome);
-                                    usuario.setCEP(textoCep);
-                                    usuario.setTelefone(textoTelefone);
-                                    usuario.setCategoria(textoCategoria);
-                                    usuario.setAtuacao(textoAtuacao);
-                                    usuario.setDescricao(textoDescricao);
-                                    usuario.setEmail(textoEmail);
-                                    usuario.setSenha(textoSenha);
-                                    cadastrarUsuario();
+                                                usuario = new Usuario();
+                                                usuario.setTipoCadastro(tipoCadastro);
+                                                usuario.setNome(textoNome);
+                                                usuario.setCEP(textoCep);
+                                                usuario.setTelefone(textoTelefone);
+                                                usuario.setCategoria(textoCategoria);
+                                                usuario.setAtuacao(textoAtuacao);
+                                                usuario.setDescricao(textoDescricao);
+                                                usuario.setEmail(textoEmail);
+                                                usuario.setSenha(textoSenha);
+                                                cadastrarUsuario();
 
 
+                                            } else {
+                                                Toast.makeText(CadastroPrestadorActivity.this,
+                                                        "Preencha o campo senha!",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+                                        } else {
+                                            Toast.makeText(CadastroPrestadorActivity.this,
+                                                    "Preencha o campo email!",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else {
+                                        Toast.makeText(CadastroPrestadorActivity.this,
+                                                "Preencha o campo descrição!",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
                                 } else {
                                     Toast.makeText(CadastroPrestadorActivity.this,
-                                            "Preencha o campo senha!",
+                                            "Preencha o campo atuação!",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             } else {
                                 Toast.makeText(CadastroPrestadorActivity.this,
-                                        "Preencha o campo email!",
+                                        "Preencha o campo categoria!",
                                         Toast.LENGTH_SHORT).show();
                             }
                         } else {

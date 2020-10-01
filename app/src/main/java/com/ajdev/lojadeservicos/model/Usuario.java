@@ -32,6 +32,7 @@ public class Usuario implements Serializable {
         firebase.child("usuarios")
                 .child(this.idUsuario)
                 .setValue(this);
+
     }
 
     public void atualizar() {
@@ -44,10 +45,10 @@ public class Usuario implements Serializable {
         usuarioRef.updateChildren(valoresUsuario);
     }
 
-    public Map<String, Object> convertParaMap(){
+    public Map<String, Object> convertParaMap() {
         HashMap<String, Object> usuarioMap = new HashMap<>();
         usuarioMap.put("tipoCadastro", getTipoCadastro());
-        usuarioMap.put("email",getEmail());
+        usuarioMap.put("email", getEmail());
         usuarioMap.put("nome", getNome());
         usuarioMap.put("cep", getCEP());
         usuarioMap.put("telefone", getTelefone());

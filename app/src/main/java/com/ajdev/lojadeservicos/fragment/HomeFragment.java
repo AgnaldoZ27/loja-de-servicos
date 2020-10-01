@@ -1,14 +1,33 @@
 package com.ajdev.lojadeservicos.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Switch;
 
 import com.ajdev.lojadeservicos.R;
+import com.ajdev.lojadeservicos.activity.PerfilPrestadorActivity;
+import com.ajdev.lojadeservicos.adapter.AdapterPesquisa;
+import com.ajdev.lojadeservicos.adapter.MensagemAdapter;
+import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
+import com.ajdev.lojadeservicos.helper.RecyclerItemClickListener;
+import com.ajdev.lojadeservicos.model.Usuario;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +35,11 @@ import com.ajdev.lojadeservicos.R;
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment {
+
+    private RecyclerView recyclerViewHome;
+    private DatabaseReference usuarioRef;
+    private AdapterPesquisa adapter;
+    private List<Usuario> listaUsuario = new ArrayList<>();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,6 +85,72 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        //Configurações inicias
+        recyclerViewHome = view.findViewById(R.id.recyclerViewHome);
+        usuarioRef = ConfiguracaoFirebase.getFirebaseDataBase().child("usuarios");
+
+        //Configurações do adapter
+        adapter = new AdapterPesquisa(listaUsuario, getActivity());
+
+        //Configura RecyclerView
+        recyclerViewHome.setHasFixedSize(true);
+        recyclerViewHome.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new AdapterPesquisa(listaUsuario, getActivity());
+        recyclerViewHome.setAdapter(adapter);
+
+        //Recupera prestadores
+        recuperarPrestadores();
+
+        //Configurar evento de clique
+        recyclerViewHome.addOnItemTouchListener(new RecyclerItemClickListener(
+                getActivity(),
+                recyclerViewHome,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Usuario usuarioSelecionado = listaUsuario.get(position);
+                        Intent i = new Intent(getActivity(), PerfilPrestadorActivity.class);
+                        i.putExtra("prestadorSelecionado", usuarioSelecionado);
+                        startActivity(i);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    }
+                }
+        ));
+        return view;
     }
+
+    public void recuperarPrestadores() {
+        listaUsuario.clear();
+        usuarioRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Usuario usuario = ds.getValue(Usuario.class);
+                    if (usuario.getTipoCadastro().equals("PRESTADOR")) {
+                        listaUsuario.add(usuario);
+                    }
+
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
 }

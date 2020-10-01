@@ -1,5 +1,6 @@
 package com.ajdev.lojadeservicos.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,10 +12,14 @@ import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.ajdev.lojadeservicos.R;
+import com.ajdev.lojadeservicos.activity.ChatActivity;
+import com.ajdev.lojadeservicos.activity.PerfilPrestadorActivity;
 import com.ajdev.lojadeservicos.adapter.MensagemAdapter;
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
+import com.ajdev.lojadeservicos.helper.RecyclerItemClickListener;
 import com.ajdev.lojadeservicos.model.Usuario;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -88,6 +93,7 @@ public class MensagemFragment extends Fragment {
         recyclerViewMensagem = view.findViewById(R.id.recyclerViewMensagem);
         usuarioRef = ConfiguracaoFirebase.getFirebaseDataBase().child("usuarios");
 
+
         //Configurações do adapter
         adapter = new MensagemAdapter(mensagens, getActivity());
 
@@ -97,8 +103,30 @@ public class MensagemFragment extends Fragment {
         recyclerViewMensagem.setHasFixedSize(true);
         recyclerViewMensagem.setAdapter(adapter);
 
-        //Configurar evento de clice no recyclerview
+        //Configurar evento de clique no recyclerview
+        recyclerViewMensagem.addOnItemTouchListener(new RecyclerItemClickListener(
+                getActivity(),
+                recyclerViewMensagem,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Usuario usuarioSelecionado = mensagens.get(position);
+                        Intent i = new Intent(getActivity(), ChatActivity.class);
+                        i.putExtra("prestadorSelecionado", usuarioSelecionado);
+                        startActivity(i);
+                    }
 
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    }
+                }
+        ));
 
         return view;
     }

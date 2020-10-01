@@ -35,7 +35,7 @@ public class PerfilFragment extends Fragment {
     private CircleImageView imagePerfil;
     private TextView nomePerfil, telefonePerfil, emailPerfil, cepPerfil, categoriaPerfil, atuacaoPerfil, descricaoPerfil;
     private Button buttonAcaoPerfil;
-    private DatabaseReference firebaseRef;
+    private DatabaseReference usuarioRef;
     private String identificadorUsuario;
     private Usuario usuario;
 
@@ -87,7 +87,7 @@ public class PerfilFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_perfil, container, false);
 
         //Configurações iniciais
-        firebaseRef = ConfiguracaoFirebase.getFirebaseDataBase();
+        usuarioRef = ConfiguracaoFirebase.getFirebaseDataBase();
         identificadorUsuario = UsuarioFirebase.getIdentficadorUsuario();
 
         //Configurações dos componentes
@@ -99,11 +99,10 @@ public class PerfilFragment extends Fragment {
         categoriaPerfil = view.findViewById(R.id.textViewCategoriaPerfil);
         atuacaoPerfil = view.findViewById(R.id.textViewAtuacaoPerfil);
         descricaoPerfil = view.findViewById(R.id.textViewDescricaoPerfil);
-
         buttonAcaoPerfil = view.findViewById(R.id.buttonEditarPerfil);
 
         //Recuperar informações do perfil
-        DatabaseReference databaseReference = firebaseRef
+        DatabaseReference databaseReference = usuarioRef
                 .child("usuarios")
                 .child(identificadorUsuario);
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -158,5 +157,6 @@ public class PerfilFragment extends Fragment {
         return view;
 
     }
+
 
 }

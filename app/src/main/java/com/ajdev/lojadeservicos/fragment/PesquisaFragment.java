@@ -157,7 +157,7 @@ public class PesquisaFragment extends Fragment {
 
         //pesquisa usuários caso tenha texto na pesquisa
         if (texto.length() >= 3) {
-            Query query = usuarioRef.orderByChild("categoria")
+            Query query = usuarioRef.orderByChild("atuacao")
                     .startAt(texto)
                     .endAt(texto + "\uf8ff");
             query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -172,8 +172,8 @@ public class PesquisaFragment extends Fragment {
 
                     adapterPesquisa.notifyDataSetChanged();
 
-                   int total = listaUsuario.size();
-                    Log.i("totalUsuario", "total: "+ total);
+                    //int total = listaUsuario.size();
+                    //Log.i("totalUsuario", "total: " + total);
                 }
 
                 @Override

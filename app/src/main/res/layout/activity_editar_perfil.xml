@@ -52,6 +52,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_botao"
                 android:drawableLeft="@drawable/ic_perfil"
+                android:drawablePadding="5dp"
                 android:hint="Nome"
                 android:padding="10dp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -67,6 +68,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_botao"
                 android:drawableLeft="@drawable/ic_location"
+                android:drawablePadding="5dp"
                 android:hint="CEP"
                 android:padding="10dp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -82,6 +84,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_botao"
                 android:drawableLeft="@drawable/ic_phone"
+                android:drawablePadding="5dp"
                 android:hint="Telefone"
                 android:padding="10dp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -98,6 +101,50 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_botao"
                 android:drawableLeft="@drawable/ic_email"
+                android:drawablePadding="5dp"
+                android:padding="10dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_botao"
+                android:drawableLeft="@drawable/ic_work"
+                android:drawablePadding="5dp"
+                android:hint="Categoria"
+                android:padding="10dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_atuacao"
+                android:drawablePadding="5dp"
+                android:hint="Atuação"
+                android:padding="10dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_details"
+                android:drawablePadding="5dp"
+                android:hint="Detalhes"
                 android:padding="10dp" />
         </com.google.android.material.textfield.TextInputLayout>
 

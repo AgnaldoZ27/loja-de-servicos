@@ -41,7 +41,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
     private TextView textAlterarFoto;
     private TextInputEditText editNomePerfil, editCepPerfil, editTelefonePerfil, editEmailPerfil;
     private Button buttonSalvarAlteracoes;
-    private static final int SELECAO_GALERIA = 200;
+    private static final int SELECAO_GALERIA = 1;
     private StorageReference storageRef;
     private Usuario usuario;
     private  DatabaseReference firebaseRef;
@@ -94,7 +94,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
 
                 }
                 
-                //salvar alterações de nome
+                //salvar alterações
                 buttonSalvarAlteracoes.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -135,6 +135,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+
             Bitmap imagem = null;
 
             try {
