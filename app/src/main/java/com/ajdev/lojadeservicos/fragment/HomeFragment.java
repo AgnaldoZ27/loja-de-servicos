@@ -1,9 +1,15 @@
 package com.ajdev.lojadeservicos.fragment;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,13 +18,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Switch;
 
 import com.ajdev.lojadeservicos.R;
 import com.ajdev.lojadeservicos.activity.PerfilPrestadorActivity;
 import com.ajdev.lojadeservicos.adapter.AdapterPesquisa;
-import com.ajdev.lojadeservicos.adapter.MensagemAdapter;
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
+import com.ajdev.lojadeservicos.config.Permissoes;
 import com.ajdev.lojadeservicos.helper.RecyclerItemClickListener;
 import com.ajdev.lojadeservicos.model.Usuario;
 import com.google.firebase.database.DataSnapshot;
@@ -39,7 +44,10 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerViewHome;
     private DatabaseReference usuarioRef;
     private AdapterPesquisa adapter;
-    private List<Usuario> listaUsuario = new ArrayList<>();
+    private List<Usuario> listaPrestador = new ArrayList<>();
+    private String[] permissoes = new String[]{
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -91,13 +99,16 @@ public class HomeFragment extends Fragment {
         recyclerViewHome = view.findViewById(R.id.recyclerViewHome);
         usuarioRef = ConfiguracaoFirebase.getFirebaseDataBase().child("usuarios");
 
+        //
+        Permissoes.validarPermissoes(permissoes, this.getActivity(), 1);
+
         //Configurações do adapter
-        adapter = new AdapterPesquisa(listaUsuario, getActivity());
+        adapter = new AdapterPesquisa(listaPrestador, getActivity());
 
         //Configura RecyclerView
         recyclerViewHome.setHasFixedSize(true);
         recyclerViewHome.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new AdapterPesquisa(listaUsuario, getActivity());
+        adapter = new AdapterPesquisa(listaPrestador, getActivity());
         recyclerViewHome.setAdapter(adapter);
 
         //Recupera prestadores
@@ -110,7 +121,7 @@ public class HomeFragment extends Fragment {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Usuario usuarioSelecionado = listaUsuario.get(position);
+                        Usuario usuarioSelecionado = listaPrestador.get(position);
                         Intent i = new Intent(getActivity(), PerfilPrestadorActivity.class);
                         i.putExtra("prestadorSelecionado", usuarioSelecionado);
                         startActivity(i);
@@ -131,16 +142,16 @@ public class HomeFragment extends Fragment {
     }
 
     public void recuperarPrestadores() {
-        listaUsuario.clear();
+        listaPrestador.clear();
         usuarioRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Usuario usuario = ds.getValue(Usuario.class);
                     if (usuario.getTipoCadastro().equals("PRESTADOR")) {
-                        listaUsuario.add(usuario);
-                    }
 
+                        listaPrestador.add(usuario);
+                    }
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -151,6 +162,5 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
 
 }

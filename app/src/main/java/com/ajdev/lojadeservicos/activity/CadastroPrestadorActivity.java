@@ -3,6 +3,8 @@ package com.ajdev.lojadeservicos.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +23,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 public class CadastroPrestadorActivity extends AppCompatActivity {
 
@@ -74,6 +80,11 @@ public class CadastroPrestadorActivity extends AppCompatActivity {
                                                 usuario.setDescricao(textoDescricao);
                                                 usuario.setEmail(textoEmail);
                                                 usuario.setSenha(textoSenha);
+                                                try {
+                                                    recuperarLatLong();
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
                                                 cadastrarUsuario();
 
 
@@ -183,5 +194,23 @@ public class CadastroPrestadorActivity extends AppCompatActivity {
         botaoCadastrar = findViewById(R.id.botaoCadastrar);
         progressBar = findViewById(R.id.progressBarCadastro);
 
+    }
+
+    public void recuperarLatLong() throws IOException {
+        double latitude = 0;
+        double longitude = 0;
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        List<Address> addresses = geocoder.getFromLocationName(usuario.getCEP(), 1);
+        Address address = addresses.get(0);
+        latitude = address.getLatitude();
+        longitude = address.getLongitude();
+        /*LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        }*/
+        usuario.setLatitude(latitude);
+        usuario.setLongitude(longitude);
     }
 }

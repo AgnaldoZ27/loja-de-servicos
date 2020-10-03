@@ -22,6 +22,8 @@ public class Usuario implements Serializable {
     private String categoria;
     private String atuacao;
     private String descricao;
+    private Double latitude;
+    private Double longitude;
 
     public Usuario() {
 
@@ -58,11 +60,13 @@ public class Usuario implements Serializable {
         usuarioMap.put("categoria", getCategoria());
         usuarioMap.put("atuacao", getAtuacao());
         usuarioMap.put("descricao", getDescricao());
+        usuarioMap.put("latitude", getLatitude());
+        usuarioMap.put("longitude", getLongitude());
 
         return usuarioMap;
     }
 
-    public Usuario(String idUsuario, String tipoCadastro, String nome, String CEP, String telefone, String email, String senha, String caminhoFoto, String CPF_CNPJ, String categoria, String atuacao, String descricao) {
+    public Usuario(String idUsuario, String tipoCadastro, String nome, String CEP, String telefone, String email, String senha, String caminhoFoto, String CPF_CNPJ, String categoria, String atuacao, String descricao, Double latitude, Double longitude) {
         this.idUsuario = idUsuario;
         this.tipoCadastro = tipoCadastro;
         this.nome = nome;
@@ -75,6 +79,9 @@ public class Usuario implements Serializable {
         this.categoria = categoria;
         this.atuacao = atuacao;
         this.descricao = descricao;
+        this.latitude = latitude;
+        this.longitude = longitude;
+
     }
 
 
@@ -174,5 +181,21 @@ public class Usuario implements Serializable {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 }
