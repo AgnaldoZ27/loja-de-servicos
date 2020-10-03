@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ajdev.lojadeservicos.R;
+import com.ajdev.lojadeservicos.helper.Localizacao;
 import com.ajdev.lojadeservicos.model.Usuario;
 import com.bumptech.glide.Glide;
 
@@ -22,6 +23,8 @@ public class AdapterPesquisa extends RecyclerView.Adapter<AdapterPesquisa.MyView
 
     private List<Usuario> listaUsuario;
     private Context context;
+    private Localizacao localizacao;
+
 
     public AdapterPesquisa(List<Usuario> l, Context c) {
         this.listaUsuario = l;
@@ -43,12 +46,16 @@ public class AdapterPesquisa extends RecyclerView.Adapter<AdapterPesquisa.MyView
         holder.categoria.setText(usuario.getCategoria());
         holder.atuacao.setText(usuario.getAtuacao());
 
+        float distancia = localizacao.calcularDistancia(usuario.getLatitude(), usuario.getLongitude());
+        String distanciaFormatada = localizacao.formatarDistancia(distancia);
+        holder.distancia.setText(distanciaFormatada + "- aproximadamente");
+
         //Configuração de foto
         String foto = usuario.getCaminhoFoto();
-        if(foto != null){
+        if (foto != null) {
             Uri uri = Uri.parse(usuario.getCaminhoFoto());
             Glide.with(context).load(uri).into(holder.foto);
-        }else{
+        } else {
             holder.foto.setImageResource(R.drawable.avatar);
         }
     }
@@ -61,7 +68,7 @@ public class AdapterPesquisa extends RecyclerView.Adapter<AdapterPesquisa.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         CircleImageView foto;
-        TextView nome, categoria, atuacao;
+        TextView nome, categoria, atuacao, distancia;
 
 
         public MyViewHolder(@NonNull View itemView) {
@@ -71,6 +78,7 @@ public class AdapterPesquisa extends RecyclerView.Adapter<AdapterPesquisa.MyView
             nome = itemView.findViewById(R.id.textNomePesquisa);
             categoria = itemView.findViewById(R.id.textCategoriaPesquisa);
             atuacao = itemView.findViewById(R.id.textAtuacaoPesquisa);
+            distancia = itemView.findViewById(R.id.textViewDistancia);
 
         }
     }

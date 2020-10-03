@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
+import com.ajdev.lojadeservicos.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -74,23 +75,15 @@ public class UsuarioFirebase {
         }
     }
 
-    /*public static Usuario getDadosUsuarioLogado() {
-
+    public static Usuario getDadosUsuarioLogado() {
 
         FirebaseUser firebaseUser = getUsuarioAtual();
 
         Usuario usuario = new Usuario();
+        usuario.setIdUsuario(firebaseUser.getUid());
         usuario.setEmail(firebaseUser.getEmail());
         usuario.setNome(firebaseUser.getDisplayName());
-        usuario.setTelefone(firebaseUser.getPhoneNumber());
-        usuario.setIdUsuario(firebaseUser.getUid());
-
-        if (firebaseUser.getPhotoUrl() == null) {
-            usuario.setCaminhoFoto("");
-        } else {
-            usuario.setCaminhoFoto(firebaseUser.getPhotoUrl().toString());
-        }
 
         return usuario;
-    }*/
+    }
 }

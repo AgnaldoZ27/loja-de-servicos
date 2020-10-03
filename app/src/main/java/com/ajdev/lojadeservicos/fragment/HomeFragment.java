@@ -25,6 +25,7 @@ import com.ajdev.lojadeservicos.adapter.AdapterPesquisa;
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
 import com.ajdev.lojadeservicos.config.Permissoes;
 import com.ajdev.lojadeservicos.helper.RecyclerItemClickListener;
+import com.ajdev.lojadeservicos.helper.UsuarioFirebase;
 import com.ajdev.lojadeservicos.model.Usuario;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,8 +47,9 @@ public class HomeFragment extends Fragment {
     private AdapterPesquisa adapter;
     private List<Usuario> listaPrestador = new ArrayList<>();
     private String[] permissoes = new String[]{
-            Manifest.permission.ACCESS_FINE_LOCATION
-    };
+            Manifest.permission.ACCESS_FINE_LOCATION};
+    private String identificadorUsuario;
+    private Usuario cliente;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -98,8 +100,9 @@ public class HomeFragment extends Fragment {
         //Configurações inicias
         recyclerViewHome = view.findViewById(R.id.recyclerViewHome);
         usuarioRef = ConfiguracaoFirebase.getFirebaseDataBase().child("usuarios");
+        identificadorUsuario = UsuarioFirebase.getIdentficadorUsuario();
 
-        //
+        //Validar permissões
         Permissoes.validarPermissoes(permissoes, this.getActivity(), 1);
 
         //Configurações do adapter
@@ -110,6 +113,8 @@ public class HomeFragment extends Fragment {
         recyclerViewHome.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new AdapterPesquisa(listaPrestador, getActivity());
         recyclerViewHome.setAdapter(adapter);
+
+        //
 
         //Recupera prestadores
         recuperarPrestadores();
@@ -149,7 +154,6 @@ public class HomeFragment extends Fragment {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Usuario usuario = ds.getValue(Usuario.class);
                     if (usuario.getTipoCadastro().equals("PRESTADOR")) {
-
                         listaPrestador.add(usuario);
                     }
                 }
