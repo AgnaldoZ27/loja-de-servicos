@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,12 +40,13 @@ public class EditarPerfilActivity extends AppCompatActivity {
 
     private CircleImageView imageEditarPerfil;
     private TextView textAlterarFoto;
-    private TextInputEditText editNomePerfil, editCepPerfil, editTelefonePerfil, editEmailPerfil;
+    private TextInputEditText editNomePerfil, editCepPerfil, editTelefonePerfil, editEmailPerfil, editCategoriaPerfil, editAtuacaoPerfil, editDescricaoPerfil;
+    private TextInputLayout textInputCategoria, textInputAtuacao, textInputDescricao;
     private Button buttonSalvarAlteracoes;
     private static final int SELECAO_GALERIA = 1;
     private StorageReference storageRef;
     private Usuario usuario;
-    private  DatabaseReference firebaseRef;
+    private DatabaseReference firebaseRef;
     private String identificadorUsuario;
 
     @Override
@@ -76,12 +78,21 @@ public class EditarPerfilActivity extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getValue() != null){
+                if (dataSnapshot.getValue() != null) {
                     usuario = dataSnapshot.getValue(Usuario.class);
                     editNomePerfil.setText(usuario.getNome());
                     editCepPerfil.setText(usuario.getCEP());
                     editEmailPerfil.setText(usuario.getEmail());
                     editTelefonePerfil.setText(usuario.getTelefone());
+                    String tipo = usuario.getTipoCadastro();
+                    if (tipo.equals("PRESTADOR")) {
+                        textInputCategoria.setVisibility(View.VISIBLE);
+                        editCategoriaPerfil.setText(usuario.getCategoria());
+                        textInputAtuacao.setVisibility(View.VISIBLE);
+                        editAtuacaoPerfil.setText(usuario.getAtuacao());
+                        textInputDescricao.setVisibility(View.VISIBLE);
+                        editDescricaoPerfil.setText(usuario.getDescricao());
+                    }
 
                     String foto = usuario.getCaminhoFoto();
                     if (foto != null) {
@@ -93,7 +104,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
                     }
 
                 }
-                
+
                 //salvar alterações
                 buttonSalvarAlteracoes.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -103,14 +114,24 @@ public class EditarPerfilActivity extends AppCompatActivity {
                         String cep = editCepPerfil.getText().toString();
                         String telefone = editTelefonePerfil.getText().toString();
                         String email = editEmailPerfil.getText().toString();
+                        String categoria = editCategoriaPerfil.getText().toString();
+                        String atuacao = editAtuacaoPerfil.getText().toString();
+                        String descricao = editDescricaoPerfil.getText().toString();
+
 
                         //atualizar nome no perfil.
-                        //UsuarioFirebase.atualizarNomeUsuario(nome);
+                        UsuarioFirebase.atualizarNomeUsuario(nome);
 
                         usuario.setNome(nome);
                         usuario.setCEP(cep);
                         usuario.setTelefone(telefone);
                         usuario.setEmail(email);
+                        String tipo = usuario.getTipoCadastro();
+                        if (tipo.equals("PRESTADOR")) {
+                            usuario.setCategoria(categoria);
+                            usuario.setAtuacao(atuacao);
+                            usuario.setDescricao(descricao);
+                        }
 
                         //atualizar no banco de dados.
                         usuario.atualizar();
@@ -128,6 +149,18 @@ public class EditarPerfilActivity extends AppCompatActivity {
 
             }
         });
+
+        //Alterar foto do usuário
+        textAlterarFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                if (i.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(i, SELECAO_GALERIA);
+                }
+            }
+        });
+
 
     }
 
@@ -202,23 +235,28 @@ public class EditarPerfilActivity extends AppCompatActivity {
         //Atualizar foto no perfil
         UsuarioFirebase.atualizarFotoUsuario(url);
 
-        //Atualizar foto no Firebase
-        usuario.setCaminhoFoto(url.toString());
-        usuario.atualizar();
         Toast.makeText(EditarPerfilActivity.this,
                 "Sua foto foi atualizada!",
                 Toast.LENGTH_SHORT).show();
     }
 
     public void inicializarComponentes() {
+
         imageEditarPerfil = findViewById(R.id.imagePerfil);
         textAlterarFoto = findViewById(R.id.textAlterarFoto);
         editNomePerfil = findViewById(R.id.editAlterarNome);
         editCepPerfil = findViewById(R.id.editAlterarCep);
         editTelefonePerfil = findViewById(R.id.editAlterarTelefone);
         editEmailPerfil = findViewById(R.id.editAlterarEmail);
+        editCategoriaPerfil = findViewById(R.id.editAlterarCategoria);
+        editAtuacaoPerfil = findViewById(R.id.editAlterarAtuacao);
+        editDescricaoPerfil = findViewById(R.id.editAlterarDescricao);
         buttonSalvarAlteracoes = findViewById(R.id.buttonSalvarAlteracoes);
         editEmailPerfil.setFocusable(false);
+
+        textInputCategoria = findViewById(R.id.textInputCategoria);
+        textInputAtuacao = findViewById(R.id.textInputAtuacao);
+        textInputDescricao = findViewById(R.id.textInputAtuacao);
     }
 
     @Override
