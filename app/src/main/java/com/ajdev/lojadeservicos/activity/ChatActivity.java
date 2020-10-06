@@ -23,6 +23,7 @@ import com.ajdev.lojadeservicos.R;
 import com.ajdev.lojadeservicos.adapter.ChatAdapter;
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
 import com.ajdev.lojadeservicos.helper.UsuarioFirebase;
+import com.ajdev.lojadeservicos.model.Conversa;
 import com.ajdev.lojadeservicos.model.Mensagem;
 import com.ajdev.lojadeservicos.model.Usuario;
 import com.bumptech.glide.Glide;
@@ -227,12 +228,27 @@ public class ChatActivity extends AppCompatActivity {
             //Salvar mensagem para o destinatario
             salvarMensagem(idUsuarioDestinatario, idUsuarioRemetente, msg);
 
+            //Salvar conversa
+            salvarConversa(msg);
+
 
         } else {
             Toast.makeText(ChatActivity.this,
                     "Digite uma mensagem para enviar",
                     Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void salvarConversa(Mensagem msg){
+
+        Conversa conversaRemetente = new Conversa();
+        conversaRemetente.setIdRemetente(idUsuarioRemetente);
+        conversaRemetente.setIdDestinatario(idUsuarioDestinatario);
+        conversaRemetente.setUltimaMensagem(msg.getMensagem());
+        conversaRemetente.setUsuarioExibicao(usuarioDestinario);
+
+        conversaRemetente.salvar();
+
     }
 
     private void salvarMensagem(String idRemetente, String idDestinatario, Mensagem mensagem) {
@@ -257,7 +273,6 @@ public class ChatActivity extends AppCompatActivity {
         super.onStart();
         recuperarMensagens();
     }
-
 
     @Override
     protected void onStop() {
