@@ -1,7 +1,11 @@
 package com.ajdev.lojadeservicos.activity;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,14 +26,21 @@ import com.ajdev.lojadeservicos.helper.UsuarioFirebase;
 import com.ajdev.lojadeservicos.model.Mensagem;
 import com.ajdev.lojadeservicos.model.Usuario;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -40,8 +51,8 @@ public class ChatActivity extends AppCompatActivity {
     private Usuario usuarioDestinario;
     private ImageView imageCamera;
     private EditText editMensagem;
-    private DatabaseReference database;
     private StorageReference storage;
+    private DatabaseReference database;
     private DatabaseReference mensagensRef;
     private ChildEventListener childEventListenerMensagens;
 
@@ -53,6 +64,8 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView recyclerMensagens;
     private ChatAdapter adapter;
     private List<Mensagem> mensagens = new ArrayList<>();
+
+    private static final int SELECAO_CAMERA = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,10 +122,93 @@ public class ChatActivity extends AppCompatActivity {
         recyclerMensagens.setAdapter(adapter);
 
         database = ConfiguracaoFirebase.getFirebaseDataBase();
+
+        storage = ConfiguracaoFirebase.getFirebaseStorage();
+
         mensagensRef = database.child("mensagens")
                 .child(idUsuarioRemetente)
                 .child(idUsuarioDestinatario);
 
+        //Evento de clique na camera
+        imageCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (i.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(i, SELECAO_CAMERA);
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            Bitmap imagem = null;
+
+            try {
+                switch (requestCode) {
+                    case SELECAO_CAMERA:
+                        imagem = (Bitmap) data.getExtras().get("data");
+                        break;
+                }
+
+                if (imagem != null) {
+                    //Recuperar dados da imagem para o firebase
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    imagem.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+                    byte[] dadosImagem = baos.toByteArray();
+
+                    //Criar nome da imagem
+                    String nomeImagem = UUID.randomUUID().toString();
+
+                    //Configura referencia no firebase
+                    final StorageReference imagemRef = storage.child("imagens")
+                            .child("fotos")
+                            .child(idUsuarioRemetente + "")
+                            .child(nomeImagem);
+
+                    UploadTask uploadTask = imagemRef.putBytes(dadosImagem);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d("Erro", "Erro ao fazer upload");
+                            Toast.makeText(ChatActivity.this,
+                                    "Erro ao enviar a imagem",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            imagemRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    Uri url = task.getResult();
+                                    Mensagem mensagem = new Mensagem();
+                                    mensagem.setIdUsuario(idUsuarioRemetente);
+                                    mensagem.setMensagem("imagem.jpeg");
+                                    mensagem.setImagem(url.toString());
+
+                                    //Salvar imagem para o remetente
+                                    salvarMensagem(idUsuarioRemetente, idUsuarioDestinatario, mensagem);
+
+                                    //Salvar imagem para o destinatário
+                                    salvarMensagem(idUsuarioDestinatario, idUsuarioRemetente, mensagem);
+
+                                }
+                            });
+                        }
+                    });
+
+                }
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void enviarMensagem(View view) {
@@ -170,6 +266,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void recuperarMensagens() {
+
         childEventListenerMensagens = mensagensRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -202,8 +299,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
 
 }

@@ -84,6 +84,12 @@ public class UsuarioFirebase {
         usuario.setEmail(firebaseUser.getEmail());
         usuario.setNome(firebaseUser.getDisplayName());
 
+        if ( firebaseUser.getPhotoUrl() == null ){
+            usuario.setCaminhoFoto("");
+        }else {
+            usuario.setCaminhoFoto( firebaseUser.getPhotoUrl().toString() );
+        }
+
         return usuario;
     }
 }

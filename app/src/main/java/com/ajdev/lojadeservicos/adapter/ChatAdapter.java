@@ -31,9 +31,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
         this.context = c;
     }
 
-    @NonNull
+
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder( ViewGroup parent, int viewType) {
 
         View item = null;
         if ( viewType == TIPO_REMETENTE ){
@@ -45,7 +45,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, int position) {
 
         Mensagem mensagem = mensagens.get(position);
         String msg = mensagem.getMensagem();
@@ -60,6 +60,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
             //Esconder o texto
             holder.mensagem.setVisibility(View.GONE);
         } else {
+
             holder.mensagem.setText(msg);
 
             //Esconder a imagem
@@ -95,8 +96,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            imagem = itemView.findViewById(R.id.imageViewMensagem);
-            mensagem = itemView.findViewById(R.id.textNomeMensagem);
+            imagem = itemView.findViewById(R.id.imageMensagemFoto);
+            mensagem = itemView.findViewById(R.id.textNomeExibicao);
         }
     }
 }
