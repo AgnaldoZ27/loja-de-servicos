@@ -29,7 +29,7 @@
                 android:id="@+id/textNomeChat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nome"
+                android:text="Nome Destinário "
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />

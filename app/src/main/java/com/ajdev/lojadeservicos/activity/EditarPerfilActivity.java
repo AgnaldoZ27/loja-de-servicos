@@ -217,10 +217,6 @@ public class EditarPerfilActivity extends AppCompatActivity {
                                 }
                             });
 
-
-                            Toast.makeText(EditarPerfilActivity.this,
-                                    "Sucesso ao fazer upload da imagem",
-                                    Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -234,6 +230,9 @@ public class EditarPerfilActivity extends AppCompatActivity {
     private void atualizarFotoUsuario(Uri url) {
         //Atualizar foto no perfil
         UsuarioFirebase.atualizarFotoUsuario(url);
+
+        usuario.setCaminhoFoto(url.toString());
+        usuario.atualizar();
 
         Toast.makeText(EditarPerfilActivity.this,
                 "Sua foto foi atualizada!",

@@ -7,6 +7,7 @@ public class Mensagem {
     private String imagem;
 
     public Mensagem() {
+        
     }
 
     public Mensagem(String idUsuario, String mensagem, String imagem) {

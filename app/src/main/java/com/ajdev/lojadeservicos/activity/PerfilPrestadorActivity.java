@@ -103,9 +103,9 @@ public class PerfilPrestadorActivity extends AppCompatActivity {
 
     public void abrirTelaChat() {
 
-        Intent i = new Intent();
+        Intent i = new Intent(this, ChatActivity.class);
         i.putExtra("chatMensagem", usuarioSelecionado);
-        startActivity(new Intent(this, ChatActivity.class));
+        startActivity(i);
 
         finish();
     }

@@ -88,7 +88,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <com.santalu.maskara.widget.MaskEditText
                         android:id="@+id/editAlterarCep"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <com.santalu.maskara.widget.MaskEditText
                         android:id="@+id/editAlterarTelefone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

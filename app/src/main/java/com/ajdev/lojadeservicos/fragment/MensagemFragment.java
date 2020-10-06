@@ -17,7 +17,7 @@ import android.widget.AdapterView;
 import com.ajdev.lojadeservicos.R;
 import com.ajdev.lojadeservicos.activity.ChatActivity;
 import com.ajdev.lojadeservicos.activity.PerfilPrestadorActivity;
-import com.ajdev.lojadeservicos.adapter.MensagemAdapter;
+import com.ajdev.lojadeservicos.adapter.ChatAdapter;
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
 import com.ajdev.lojadeservicos.helper.RecyclerItemClickListener;
 import com.ajdev.lojadeservicos.model.Usuario;
@@ -38,7 +38,7 @@ import java.util.List;
 public class MensagemFragment extends Fragment {
 
     private RecyclerView recyclerViewMensagem;
-    private MensagemAdapter adapter;
+    private ChatAdapter adapter;
     private ArrayList<Usuario> mensagens = new ArrayList<>();
     private DatabaseReference usuarioRef;
     private ValueEventListener valueEventListenerMensagens;
@@ -95,13 +95,13 @@ public class MensagemFragment extends Fragment {
 
 
         //Configurações do adapter
-        adapter = new MensagemAdapter(mensagens, getActivity());
+        //adapter = new MensagemAdapter(mensagens, getActivity());
 
         //Configurar Recyclerview
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerViewMensagem.setLayoutManager(layoutManager);
         recyclerViewMensagem.setHasFixedSize(true);
-        recyclerViewMensagem.setAdapter(adapter);
+        //recyclerViewMensagem.setAdapter(adapter);
 
         //Configurar evento de clique no recyclerview
         recyclerViewMensagem.addOnItemTouchListener(new RecyclerItemClickListener(

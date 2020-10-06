@@ -27,6 +27,7 @@ import com.ajdev.lojadeservicos.config.Permissoes;
 import com.ajdev.lojadeservicos.helper.RecyclerItemClickListener;
 import com.ajdev.lojadeservicos.helper.UsuarioFirebase;
 import com.ajdev.lojadeservicos.model.Usuario;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,6 +51,7 @@ public class HomeFragment extends Fragment {
             Manifest.permission.ACCESS_FINE_LOCATION};
     private String identificadorUsuario;
     private Usuario cliente;
+    private FirebaseUser usuarioAtual;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -101,6 +103,7 @@ public class HomeFragment extends Fragment {
         recyclerViewHome = view.findViewById(R.id.recyclerViewHome);
         usuarioRef = ConfiguracaoFirebase.getFirebaseDataBase().child("usuarios");
         identificadorUsuario = UsuarioFirebase.getIdentficadorUsuario();
+        usuarioAtual = UsuarioFirebase.getUsuarioAtual();
 
         //Validar permissões
         Permissoes.validarPermissoes(permissoes, this.getActivity(), 1);
@@ -154,7 +157,10 @@ public class HomeFragment extends Fragment {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Usuario usuario = ds.getValue(Usuario.class);
                     if (usuario.getTipoCadastro().equals("PRESTADOR")) {
-                        listaPrestador.add(usuario);
+                        String emailUsuarioAtual = usuarioAtual.getEmail();
+                        if(!emailUsuarioAtual.equals(usuario.getEmail())){
+                            listaPrestador.add(usuario);
+                        }
                     }
                 }
                 adapter.notifyDataSetChanged();
