@@ -77,6 +77,7 @@ public class CadastroPrestadorActivity extends AppCompatActivity {
                                                 usuario.setTelefone(textoTelefone);
                                                 usuario.setCategoria(textoCategoria);
                                                 usuario.setAtuacao(textoAtuacao);
+                                                usuario.setAtuacaoMinusculo(textoAtuacao.toLowerCase());
                                                 usuario.setDescricao(textoDescricao);
                                                 usuario.setEmail(textoEmail);
                                                 usuario.setSenha(textoSenha);

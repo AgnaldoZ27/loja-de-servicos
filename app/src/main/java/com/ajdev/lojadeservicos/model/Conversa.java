@@ -22,6 +22,7 @@ public class Conversa {
                 .setValue(this);
     }
 
+
     public String getIdRemetente() {
         return idRemetente;
     }

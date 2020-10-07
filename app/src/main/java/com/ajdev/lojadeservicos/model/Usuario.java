@@ -21,6 +21,7 @@ public class Usuario implements Serializable {
     private String CPF_CNPJ;
     private String categoria;
     private String atuacao;
+    private String atuacaoMinusculo;
     private String descricao;
     private Double latitude;
     private Double longitude;
@@ -59,6 +60,7 @@ public class Usuario implements Serializable {
         usuarioMap.put("CPF_CNPJ", getCPF_CNPJ());
         usuarioMap.put("categoria", getCategoria());
         usuarioMap.put("atuacao", getAtuacao());
+        usuarioMap.put("atuacaoMinusculo", getAtuacaoMinusculo());
         usuarioMap.put("descricao", getDescricao());
         usuarioMap.put("latitude", getLatitude());
         usuarioMap.put("longitude", getLongitude());
@@ -66,7 +68,7 @@ public class Usuario implements Serializable {
         return usuarioMap;
     }
 
-    public Usuario(String idUsuario, String tipoCadastro, String nome, String CEP, String telefone, String email, String senha, String caminhoFoto, String CPF_CNPJ, String categoria, String atuacao, String descricao, Double latitude, Double longitude) {
+    public Usuario(String idUsuario, String tipoCadastro, String nome, String CEP, String telefone, String email, String senha, String caminhoFoto, String CPF_CNPJ, String categoria, String atuacao, String atuaocaoMinusculo, String descricao, Double latitude, Double longitude) {
         this.idUsuario = idUsuario;
         this.tipoCadastro = tipoCadastro;
         this.nome = nome;
@@ -78,6 +80,7 @@ public class Usuario implements Serializable {
         this.CPF_CNPJ = CPF_CNPJ;
         this.categoria = categoria;
         this.atuacao = atuacao;
+        this.atuacaoMinusculo = atuaocaoMinusculo;
         this.descricao = descricao;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -173,6 +176,14 @@ public class Usuario implements Serializable {
 
     public void setAtuacao(String atuacao) {
         this.atuacao = atuacao;
+    }
+
+    public String getAtuacaoMinusculo() {
+        return atuacaoMinusculo;
+    }
+
+    public void setAtuacaoMinusculo(String atuacaoMinusculo) {
+        this.atuacaoMinusculo = atuacaoMinusculo;
     }
 
     public String getDescricao() {

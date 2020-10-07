@@ -19,7 +19,9 @@ import com.ajdev.lojadeservicos.activity.PerfilPrestadorActivity;
 import com.ajdev.lojadeservicos.adapter.AdapterPesquisa;
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
 import com.ajdev.lojadeservicos.helper.RecyclerItemClickListener;
+import com.ajdev.lojadeservicos.helper.UsuarioFirebase;
 import com.ajdev.lojadeservicos.model.Usuario;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,6 +45,7 @@ public class PesquisaFragment extends Fragment {
     private List<Usuario> listaUsuario;
     private DatabaseReference usuarioRef;
     private AdapterPesquisa adapterPesquisa;
+    private FirebaseUser usuarioAtual;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -97,6 +100,7 @@ public class PesquisaFragment extends Fragment {
         listaUsuario = new ArrayList<>();
         usuarioRef = ConfiguracaoFirebase.getFirebaseDataBase()
                 .child("usuarios");
+        usuarioAtual = UsuarioFirebase.getUsuarioAtual();
 
         //Configura RecyclerView
         recyclerViewPesquisa.setHasFixedSize(true);
@@ -140,7 +144,7 @@ public class PesquisaFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
                 String textoDigitado = newText;
-                pesquisarPrestador(textoDigitado);
+                pesquisarPrestador(textoDigitado.toLowerCase());
                 return true;
             }
 
@@ -157,7 +161,7 @@ public class PesquisaFragment extends Fragment {
 
         //pesquisa usuários caso tenha texto na pesquisa
         if (texto.length() >= 3) {
-            Query query = usuarioRef.orderByChild("atuacao")
+            Query query = usuarioRef.orderByChild("atuacaoMinusculo")
                     .startAt(texto)
                     .endAt(texto + "\uf8ff");
             query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -167,9 +171,12 @@ public class PesquisaFragment extends Fragment {
                     listaUsuario.clear();
 
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        listaUsuario.add(ds.getValue(Usuario.class));
+                        Usuario usuario = ds.getValue(Usuario.class);
+                        String emailUsuarioAtual = usuarioAtual.getEmail();
+                        if (!emailUsuarioAtual.equals(usuario.getEmail())) {
+                            listaUsuario.add(usuario);
+                        }
                     }
-
                     adapterPesquisa.notifyDataSetChanged();
 
                     //int total = listaUsuario.size();

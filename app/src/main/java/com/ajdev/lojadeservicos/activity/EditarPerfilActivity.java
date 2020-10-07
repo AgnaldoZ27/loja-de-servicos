@@ -255,7 +255,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
 
         textInputCategoria = findViewById(R.id.textInputCategoria);
         textInputAtuacao = findViewById(R.id.textInputAtuacao);
-        textInputDescricao = findViewById(R.id.textInputAtuacao);
+        textInputDescricao = findViewById(R.id.textInputDescricao);
     }
 
     @Override

@@ -50,6 +50,7 @@ public class ChatActivity extends AppCompatActivity {
     private TextView textViewNome;
     private CircleImageView circleImageViewFoto;
     private Usuario usuarioDestinario;
+    private Usuario usuarioRemetente;
     private ImageView imageCamera;
     private EditText editMensagem;
     private StorageReference storage;
@@ -90,7 +91,10 @@ public class ChatActivity extends AppCompatActivity {
         //Recuperar dados do usuario remetente
         idUsuarioRemetente = UsuarioFirebase.getIdentficadorUsuario();
 
-        //Recuperar usuario selecionadao
+        //Recuperar dados do usuario remetente
+        usuarioRemetente = UsuarioFirebase.getDadosUsuarioLogado();
+
+        //Recuperar dados do usuario selecionadao
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             usuarioDestinario = (Usuario) bundle.getSerializable("chatMensagem");
@@ -228,8 +232,13 @@ public class ChatActivity extends AppCompatActivity {
             //Salvar mensagem para o destinatario
             salvarMensagem(idUsuarioDestinatario, idUsuarioRemetente, msg);
 
-            //Salvar conversa
-            salvarConversa(msg);
+            //Salvar conversa remetente
+            salvarConversa(idUsuarioRemetente, idUsuarioDestinatario, usuarioDestinario, msg);
+
+            //Salvar conversa destinatario
+            salvarConversa(idUsuarioDestinatario, idUsuarioRemetente, usuarioRemetente, msg);
+
+
 
 
         } else {
@@ -239,14 +248,14 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    private void salvarConversa(Mensagem msg){
+    private void salvarConversa(String idRemetente, String idDestinatario, Usuario usuarioExibicao, Mensagem msg){
 
+        //Salva a conversa para o remetente
         Conversa conversaRemetente = new Conversa();
-        conversaRemetente.setIdRemetente(idUsuarioRemetente);
-        conversaRemetente.setIdDestinatario(idUsuarioDestinatario);
+        conversaRemetente.setIdRemetente(idRemetente);
+        conversaRemetente.setIdDestinatario(idDestinatario);
         conversaRemetente.setUltimaMensagem(msg.getMensagem());
-        conversaRemetente.setUsuarioExibicao(usuarioDestinario);
-
+        conversaRemetente.setUsuarioExibicao(usuarioExibicao);
         conversaRemetente.salvar();
 
     }
