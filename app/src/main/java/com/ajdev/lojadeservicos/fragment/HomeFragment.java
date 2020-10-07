@@ -1,23 +1,17 @@
 package com.ajdev.lojadeservicos.fragment;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ajdev.lojadeservicos.R;
 import com.ajdev.lojadeservicos.activity.PerfilPrestadorActivity;
@@ -50,7 +44,6 @@ public class HomeFragment extends Fragment {
     private String[] permissoes = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION};
     private String identificadorUsuario;
-    private Usuario cliente;
     private FirebaseUser usuarioAtual;
 
     // TODO: Rename parameter arguments, choose names that match

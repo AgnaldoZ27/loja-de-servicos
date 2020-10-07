@@ -16,7 +16,7 @@
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imageViewMensagem"
+            android:id="@+id/imageViewConversas"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:src="@drawable/avatar" />
@@ -29,11 +29,17 @@
             android:padding="5dp">
 
             <TextView
-                android:id="@+id/textNomeMensagem"
+                android:id="@+id/textNomeConversas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Nome"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewUltimaMensagem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mensagem" />
         </LinearLayout>
 
     </LinearLayout>

@@ -2,46 +2,45 @@ package com.ajdev.lojadeservicos.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.ajdev.lojadeservicos.R;
 import com.ajdev.lojadeservicos.activity.ChatActivity;
-import com.ajdev.lojadeservicos.activity.PerfilPrestadorActivity;
-import com.ajdev.lojadeservicos.adapter.ChatAdapter;
+import com.ajdev.lojadeservicos.adapter.ConversasAdapter;
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
 import com.ajdev.lojadeservicos.helper.RecyclerItemClickListener;
-import com.ajdev.lojadeservicos.model.Usuario;
+import com.ajdev.lojadeservicos.helper.UsuarioFirebase;
+import com.ajdev.lojadeservicos.model.Conversa;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
-import java.sql.ClientInfoStatus;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link MensagemFragment#newInstance} factory method to
+ * Use the {@link ConversasFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MensagemFragment extends Fragment {
+public class ConversasFragment extends Fragment {
 
-    private RecyclerView recyclerViewMensagem;
-    private ChatAdapter adapter;
-    private ArrayList<Usuario> mensagens = new ArrayList<>();
-    private DatabaseReference usuarioRef;
-    private ValueEventListener valueEventListenerMensagens;
+    private RecyclerView recyclerViewConversas;
+    private List<Conversa> listaConversa = new ArrayList<>();
+    private ConversasAdapter adapter;
+    private DatabaseReference database;
+    private DatabaseReference conversasRef;
+    private ChildEventListener childEventListenerConversas;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -52,8 +51,7 @@ public class MensagemFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public MensagemFragment() {
-        // Required empty public constructor
+    public ConversasFragment() {
     }
 
     /**
@@ -65,8 +63,8 @@ public class MensagemFragment extends Fragment {
      * @return A new instance of fragment MensagemFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MensagemFragment newInstance(String param1, String param2) {
-        MensagemFragment fragment = new MensagemFragment();
+    public static ConversasFragment newInstance(String param1, String param2) {
+        ConversasFragment fragment = new ConversasFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -84,35 +82,40 @@ public class MensagemFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mensagem, container, false);
 
         //Configurações iniciais
-        recyclerViewMensagem = view.findViewById(R.id.recyclerViewMensagem);
-        usuarioRef = ConfiguracaoFirebase.getFirebaseDataBase().child("usuarios");
+        recyclerViewConversas = view.findViewById(R.id.recyclerViewConversas);
 
+        //Configura conversasRef
+        String identificadorUsuario = UsuarioFirebase.getIdentficadorUsuario();
+        database = ConfiguracaoFirebase.getFirebaseDataBase();
+        conversasRef = database.child("conversas").child(identificadorUsuario);
 
         //Configurações do adapter
-        //adapter = new MensagemAdapter(mensagens, getActivity());
+        adapter = new ConversasAdapter(listaConversa, getActivity());
 
         //Configurar Recyclerview
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerViewMensagem.setLayoutManager(layoutManager);
-        recyclerViewMensagem.setHasFixedSize(true);
-        //recyclerViewMensagem.setAdapter(adapter);
+        recyclerViewConversas.setLayoutManager(layoutManager);
+        recyclerViewConversas.setHasFixedSize(true);
+        recyclerViewConversas.setAdapter(adapter);
+
 
         //Configurar evento de clique no recyclerview
-        recyclerViewMensagem.addOnItemTouchListener(new RecyclerItemClickListener(
+        recyclerViewConversas.addOnItemTouchListener(new RecyclerItemClickListener(
                 getActivity(),
-                recyclerViewMensagem,
+                recyclerViewConversas,
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Usuario usuarioSelecionado = mensagens.get(position);
+
+                        Conversa conversaSelecionada = listaConversa.get(position);
                         Intent i = new Intent(getActivity(), ChatActivity.class);
-                        i.putExtra("prestadorSelecionado", usuarioSelecionado);
+                        i.putExtra("chatMensagem", conversaSelecionada.getUsuarioExibicao());
                         startActivity(i);
                     }
 
@@ -134,25 +137,41 @@ public class MensagemFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        recuperarMensagens();
+        recuperarConversas();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        usuarioRef.removeEventListener(valueEventListenerMensagens);
+        conversasRef.removeEventListener(childEventListenerConversas);
     }
 
-    public void recuperarMensagens(){
-       valueEventListenerMensagens = usuarioRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    Usuario usuario = ds.getValue(Usuario.class);
-                    mensagens.add(usuario);
-                }
+    public void recuperarConversas() {
 
+        childEventListenerConversas = conversasRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                //Recuperar conversas
+                Conversa conversa = dataSnapshot.getValue(Conversa.class);
+                listaConversa.add(conversa);
                 adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
             }
 
             @Override
@@ -160,6 +179,7 @@ public class MensagemFragment extends Fragment {
 
             }
         });
+
     }
 
 }

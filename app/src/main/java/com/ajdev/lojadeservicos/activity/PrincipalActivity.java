@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.ajdev.lojadeservicos.R;
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
 import com.ajdev.lojadeservicos.fragment.HomeFragment;
-import com.ajdev.lojadeservicos.fragment.MensagemFragment;
+import com.ajdev.lojadeservicos.fragment.ConversasFragment;
 import com.ajdev.lojadeservicos.fragment.PerfilFragment;
 import com.ajdev.lojadeservicos.fragment.PesquisaFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -84,7 +84,7 @@ public class PrincipalActivity extends AppCompatActivity {
                 }
                 switch (menuItem.getItemId()) {
                     case R.id.ic_mensagem:
-                        fragmentTransaction.replace(R.id.viewPager, new MensagemFragment()).commit();
+                        fragmentTransaction.replace(R.id.viewPager, new ConversasFragment()).commit();
                         return true;
                 }
                 switch (menuItem.getItemId()) {
