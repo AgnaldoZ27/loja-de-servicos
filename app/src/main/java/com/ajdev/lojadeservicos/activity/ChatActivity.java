@@ -67,7 +67,7 @@ public class ChatActivity extends AppCompatActivity {
     private ChatAdapter adapter;
     private List<Mensagem> mensagens = new ArrayList<>();
 
-    private static final int SELECAO_CAMERA = 100;
+        private static final int SELECAO_GALERIA = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +86,7 @@ public class ChatActivity extends AppCompatActivity {
         circleImageViewFoto = findViewById(R.id.circleImageFotoChat);
         editMensagem = findViewById(R.id.editTextMensagemChat);
         recyclerMensagens = findViewById(R.id.recyclerChat);
-        imageCamera = findViewById(R.id.imageViewCamera);
+        imageCamera = findViewById(R.id.imageViewGaleria);
 
         //Recuperar dados do usuario remetente
         idUsuarioRemetente = UsuarioFirebase.getIdentficadorUsuario();
@@ -138,9 +138,9 @@ public class ChatActivity extends AppCompatActivity {
         imageCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 if (i.resolveActivity(getPackageManager()) != null) {
-                    startActivityForResult(i, SELECAO_CAMERA);
+                    startActivityForResult(i, SELECAO_GALERIA);
                 }
             }
         });
@@ -155,15 +155,16 @@ public class ChatActivity extends AppCompatActivity {
 
             try {
                 switch (requestCode) {
-                    case SELECAO_CAMERA:
-                        imagem = (Bitmap) data.getExtras().get("data");
+                    case SELECAO_GALERIA:
+                        Uri localImagemSelecionada = data.getData();
+                        imagem = MediaStore.Images.Media.getBitmap(getContentResolver(), localImagemSelecionada);
                         break;
                 }
 
                 if (imagem != null) {
                     //Recuperar dados da imagem para o firebase
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    imagem.compress(Bitmap.CompressFormat.JPEG, 1500, baos);
+                    imagem.compress(Bitmap.CompressFormat.JPEG, 70, baos);
                     byte[] dadosImagem = baos.toByteArray();
 
                     //Criar nome da imagem

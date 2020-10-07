@@ -46,10 +46,10 @@
                 android:inputType="textPersonName" />
 
             <ImageView
-                android:id="@+id/imageViewCamera"
+                android:id="@+id/imageViewGaleria"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic__camera_cinza" />
+                android:src="@drawable/ic_galeria" />
 
         </LinearLayout>
 
