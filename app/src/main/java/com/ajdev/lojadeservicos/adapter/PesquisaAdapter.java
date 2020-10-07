@@ -19,14 +19,14 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AdapterPesquisa extends RecyclerView.Adapter<AdapterPesquisa.MyViewHolder> {
+public class PesquisaAdapter extends RecyclerView.Adapter<PesquisaAdapter.MyViewHolder> {
 
     private List<Usuario> listaUsuario;
     private Context context;
     private Localizacao localizacao;
 
 
-    public AdapterPesquisa(List<Usuario> l, Context c) {
+    public PesquisaAdapter(List<Usuario> l, Context c) {
         this.listaUsuario = l;
         this.context = c;
     }

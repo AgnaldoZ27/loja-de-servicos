@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ajdev.lojadeservicos.R;
 import com.ajdev.lojadeservicos.activity.PerfilPrestadorActivity;
-import com.ajdev.lojadeservicos.adapter.AdapterPesquisa;
+import com.ajdev.lojadeservicos.adapter.PesquisaAdapter;
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
 import com.ajdev.lojadeservicos.helper.RecyclerItemClickListener;
 import com.ajdev.lojadeservicos.helper.UsuarioFirebase;
@@ -44,7 +44,7 @@ public class PesquisaFragment extends Fragment {
 
     private List<Usuario> listaUsuario;
     private DatabaseReference usuarioRef;
-    private AdapterPesquisa adapterPesquisa;
+    private PesquisaAdapter adapterPesquisa;
     private FirebaseUser usuarioAtual;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -105,7 +105,7 @@ public class PesquisaFragment extends Fragment {
         //Configura RecyclerView
         recyclerViewPesquisa.setHasFixedSize(true);
         recyclerViewPesquisa.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapterPesquisa = new AdapterPesquisa(listaUsuario, getActivity());
+        adapterPesquisa = new PesquisaAdapter(listaUsuario, getActivity());
         recyclerViewPesquisa.setAdapter(adapterPesquisa);
 
         //Configurar evento de clique

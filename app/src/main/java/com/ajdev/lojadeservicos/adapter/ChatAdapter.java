@@ -22,8 +22,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
 
     private List<Mensagem> mensagens;
     private Context context;
-    private static final int TIPO_REMETENTE = 0;
-    private static final int TIPO_DESTINATARIO = 1;
+    private static final int TIPO_REMETENTE_TEXTO = 0;
+    private static final int TIPO_DESTINATARIO_TEXTO = 1;
+    private static final int TIPO_REMETENTE_FOTO = 2;
+    private static final int TIPO_DESTINATARIO_FOTO = 3;
 
 
     public ChatAdapter(List<Mensagem> listaMensagens, Context c) {
@@ -33,13 +35,17 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
 
 
     @Override
-    public MyViewHolder onCreateViewHolder( ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View item = null;
-        if ( viewType == TIPO_REMETENTE ){
-            item = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_mensagem_remetente, parent, false);
-        }else if( viewType == TIPO_DESTINATARIO ){
-            item = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_mensagem_destinatario, parent, false);
+        if (viewType == TIPO_REMETENTE_TEXTO) {
+            item = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_mensagem_remetente_texto, parent, false);
+        } else if (viewType == TIPO_REMETENTE_FOTO) {
+            item = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_mensagem_remetente_foto, parent, false);
+        }else if (viewType == TIPO_DESTINATARIO_TEXTO) {
+            item = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_mensagem_destinatario_texto, parent, false);
+        } else if (viewType == TIPO_DESTINATARIO_FOTO) {
+            item = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_mensagem_destinatario_foto, parent, false);
         }
         return new MyViewHolder(item);
     }
@@ -57,14 +63,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
                     .load(url)
                     .into(holder.imagem);
 
+
             //Esconder o texto
-            holder.mensagem.setVisibility(View.GONE);
+            //holder.mensagem.setVisibility(View.GONE);
         } else {
 
             holder.mensagem.setText(msg);
 
             //Esconder a imagem
-            holder.imagem.setVisibility(View.GONE);
+            //holder.imagem.setVisibility(View.GONE);
         }
     }
 
@@ -77,14 +84,22 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     public int getItemViewType(int position) {
         Mensagem mensagem = mensagens.get(position);
 
+        String msg = mensagem.getMensagem();
         String idUsuario = UsuarioFirebase.getIdentficadorUsuario();
 
+
         if (idUsuario.equals(mensagem.getIdUsuario())) {
-            return TIPO_REMETENTE;
+            if (!msg.equals("imagem.jpeg")) {
+                return TIPO_REMETENTE_TEXTO;
+            } else {
+                return TIPO_REMETENTE_FOTO;
+            }
         }
-
-        return TIPO_DESTINATARIO;
-
+        if (!msg.equals("imagem.jpeg")) {
+            return TIPO_DESTINATARIO_TEXTO;
+        } else {
+            return TIPO_DESTINATARIO_FOTO;
+        }
 
     }
 

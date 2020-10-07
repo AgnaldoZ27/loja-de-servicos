@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ajdev.lojadeservicos.R;
 import com.ajdev.lojadeservicos.activity.PerfilPrestadorActivity;
-import com.ajdev.lojadeservicos.adapter.AdapterPesquisa;
+import com.ajdev.lojadeservicos.adapter.PesquisaAdapter;
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
 import com.ajdev.lojadeservicos.config.Permissoes;
 import com.ajdev.lojadeservicos.helper.RecyclerItemClickListener;
@@ -39,7 +39,7 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerViewHome;
     private DatabaseReference usuarioRef;
-    private AdapterPesquisa adapter;
+    private PesquisaAdapter adapter;
     private List<Usuario> listaPrestador = new ArrayList<>();
     private String[] permissoes = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION};
@@ -102,12 +102,12 @@ public class HomeFragment extends Fragment {
         Permissoes.validarPermissoes(permissoes, this.getActivity(), 1);
 
         //Configurações do adapter
-        adapter = new AdapterPesquisa(listaPrestador, getActivity());
+        adapter = new PesquisaAdapter(listaPrestador, getActivity());
 
         //Configura RecyclerView
         recyclerViewHome.setHasFixedSize(true);
         recyclerViewHome.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new AdapterPesquisa(listaPrestador, getActivity());
+        adapter = new PesquisaAdapter(listaPrestador, getActivity());
         recyclerViewHome.setAdapter(adapter);
 
         //

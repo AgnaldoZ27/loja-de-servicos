@@ -10,24 +10,15 @@
         android:layout_height="wrap_content"
         android:layout_margin="6dp"
         android:background="@drawable/bg_balao"
-        android:backgroundTint="@android:color/white"
+        android:backgroundTint="@color/balaoRemetente"
         android:orientation="vertical"
-        android:layout_alignParentLeft="true">
-
-        <TextView
-            android:id="@+id/textNomeExibicao"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Agnaldo J."
-            android:textSize="16sp"
-            android:textStyle="bold" />
+        android:layout_alignParentRight="true">
 
         <ImageView
             android:id="@+id/imageMensagemFoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/avatar" />
-
 
     </LinearLayout>
 

@@ -163,7 +163,7 @@ public class ChatActivity extends AppCompatActivity {
                 if (imagem != null) {
                     //Recuperar dados da imagem para o firebase
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    imagem.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+                    imagem.compress(Bitmap.CompressFormat.JPEG, 1500, baos);
                     byte[] dadosImagem = baos.toByteArray();
 
                     //Criar nome da imagem
@@ -183,6 +183,7 @@ public class ChatActivity extends AppCompatActivity {
                             Toast.makeText(ChatActivity.this,
                                     "Erro ao enviar a imagem",
                                     Toast.LENGTH_LONG).show();
+
                         }
                     }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -201,6 +202,10 @@ public class ChatActivity extends AppCompatActivity {
 
                                     //Salvar imagem para o destinatário
                                     salvarMensagem(idUsuarioDestinatario, idUsuarioRemetente, mensagem);
+
+                                    Toast.makeText(ChatActivity.this,
+                                            "Foto enviada com sucesso",
+                                            Toast.LENGTH_LONG).show();
 
                                 }
                             });
@@ -239,8 +244,6 @@ public class ChatActivity extends AppCompatActivity {
             salvarConversa(idUsuarioDestinatario, idUsuarioRemetente, usuarioRemetente, msg);
 
 
-
-
         } else {
             Toast.makeText(ChatActivity.this,
                     "Digite uma mensagem para enviar",
@@ -248,7 +251,7 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
-    private void salvarConversa(String idRemetente, String idDestinatario, Usuario usuarioExibicao, Mensagem msg){
+    private void salvarConversa(String idRemetente, String idDestinatario, Usuario usuarioExibicao, Mensagem msg) {
 
         //Salva a conversa para o remetente
         Conversa conversaRemetente = new Conversa();
@@ -290,6 +293,8 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void recuperarMensagens() {
+
+        mensagens.clear();
 
         childEventListenerMensagens = mensagensRef.addChildEventListener(new ChildEventListener() {
             @Override
