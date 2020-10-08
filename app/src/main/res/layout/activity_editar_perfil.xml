@@ -19,12 +19,13 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/background_degrade">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imagePerfil"
@@ -39,7 +40,7 @@
                     android:layout_marginBottom="16dp"
                     android:src="@drawable/avatar"
                     app:civ_border_color="#FF000000"
-                    app:civ_border_width="2dp"
+                    app:civ_border_width="1dp"
                     app:layout_constraintBottom_toTopOf="@+id/guideline"
                     app:layout_constraintEnd_toStartOf="@+id/guideline2"
                     app:layout_constraintHorizontal_bias="0.8"
@@ -51,7 +52,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="AlterarFoto" />
+                    android:text="Alterar Foto"
+                    android:textColor="@android:color/black" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
@@ -65,7 +67,9 @@
                         android:drawableLeft="@drawable/ic_email"
                         android:drawablePadding="6dp"
                         android:hint="E-mail"
-                        android:padding="10dp" />
+                        android:padding="10dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@android:color/black" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,7 +85,9 @@
                         android:drawableLeft="@drawable/ic_perfil"
                         android:drawablePadding="6dp"
                         android:hint="Nome"
-                        android:padding="10dp" />
+                        android:padding="10dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@android:color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -97,6 +103,8 @@
                         android:drawablePadding="6dp"
                         android:hint="CEP"
                         android:padding="10dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@android:color/black"
                         app:mask="_____-___"
                         app:maskCharacter="_"
                         app:maskStyle="completable" />
@@ -115,6 +123,8 @@
                         android:drawablePadding="6dp"
                         android:hint="Telefone"
                         android:padding="10dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@android:color/black"
                         app:mask="+55 (__) _____-____"
                         app:maskCharacter="_"
                         app:maskStyle="completable" />
@@ -135,6 +145,8 @@
                         android:drawablePadding="6dp"
                         android:hint="Categoria"
                         android:padding="10dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@android:color/black"
                         android:visibility="visible" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -152,7 +164,9 @@
                         android:drawableLeft="@drawable/ic_atuacao"
                         android:drawablePadding="6dp"
                         android:hint="Atuação"
-                        android:padding="10dp" />
+                        android:padding="10dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@android:color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -170,7 +184,9 @@
                         android:drawableLeft="@drawable/ic_details"
                         android:drawablePadding="6dp"
                         android:hint="Descrição"
-                        android:padding="10dp" />
+                        android:padding="10dp"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@android:color/black" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
@@ -180,7 +196,8 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/background_botao"
                     android:padding="10dp"
-                    android:text="Salvar Alterações" />
+                    android:text="Salvar Alterações"
+                    android:textColor="@android:color/white" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

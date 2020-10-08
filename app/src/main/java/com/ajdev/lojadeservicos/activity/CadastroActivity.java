@@ -161,53 +161,7 @@ public class CadastroActivity extends AppCompatActivity {
                 });
     }
 
-    /*public void cadastrarPrestador() {
-        autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
-        autenticacao.createUserWithEmailAndPassword(
-                prestador.getEmail(), prestador.getSenha())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
 
-                            progressBar.setVisibility(View.VISIBLE);
-
-                            //Salvar dados do usuario no Firebase.
-                            String idUsuario = task.getResult().getUser().getUid();
-                            prestador.setIdUsuario(idUsuario);
-                            prestador.salvarPrestador();
-
-                            //Salvar dados do profile no Firebase.
-                            UsuarioFirebase.atualizarNomeUsuario(prestador.getNome());
-
-                            Toast.makeText(CadastroActivity.this,
-                                    "Cadastro com Sucesso",
-                                    Toast.LENGTH_SHORT).show();
-
-                            finish();
-                        } else {
-
-                            String excecao = "";
-                            try {
-                                throw task.getException();
-                            } catch (FirebaseAuthWeakPasswordException e) {
-                                excecao = "Digite uma senha mais forte!";
-                            } catch (FirebaseAuthInvalidCredentialsException e) {
-                                excecao = "Por favor, digite um e-mail válido";
-                            } catch (FirebaseAuthUserCollisionException e) {
-                                excecao = "Esta conta já foi cadastrada";
-                            } catch (Exception e) {
-                                excecao = "Erro ao cadastrar Prestador: " + e.getMessage();
-                                e.printStackTrace();
-                            }
-
-                            Toast.makeText(CadastroActivity.this,
-                                    excecao,
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }*/
 
     public void inicializarComponentes() {
 
@@ -229,12 +183,7 @@ public class CadastroActivity extends AppCompatActivity {
         Address address = addresses.get(0);
         latitude = address.getLatitude();
         longitude = address.getLongitude();
-        /*LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-        }*/
+
         usuario.setLatitude(latitude);
         usuario.setLongitude(longitude);
     }

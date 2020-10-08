@@ -22,6 +22,7 @@ import com.ajdev.lojadeservicos.helper.RecyclerItemClickListener;
 import com.ajdev.lojadeservicos.helper.UsuarioFirebase;
 import com.ajdev.lojadeservicos.model.Usuario;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -110,10 +111,8 @@ public class HomeFragment extends Fragment {
         adapter = new PesquisaAdapter(listaPrestador, getActivity());
         recyclerViewHome.setAdapter(adapter);
 
-        //
-
         //Recupera prestadores
-        recuperarPrestadores();
+        //recuperarPrestadores();
 
         //Configurar evento de clique
         recyclerViewHome.addOnItemTouchListener(new RecyclerItemClickListener(
@@ -141,6 +140,13 @@ public class HomeFragment extends Fragment {
         ));
         return view;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        recuperarPrestadores();
+    }
+
 
     public void recuperarPrestadores() {
         listaPrestador.clear();
