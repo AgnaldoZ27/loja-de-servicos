@@ -1,5 +1,7 @@
 package com.ajdev.lojadeservicos.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.Spinner;
 
@@ -43,13 +46,15 @@ public class PesquisaFragment extends Fragment {
     //Widget
     private SearchView searchViewPesquisa;
     private RecyclerView recyclerViewPesquisa;
-    private Spinner campoFiltro;
 
     private List<Usuario> listaPrestador;
     private DatabaseReference usuarioRef;
     private PesquisaAdapter adapterPesquisa;
     private FirebaseUser usuarioAtual;
     private Localizacao localizacao;
+
+    private Button filtroButton;
+    private String filtroDistancia = "Até 10Km";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -99,7 +104,6 @@ public class PesquisaFragment extends Fragment {
 
         searchViewPesquisa = view.findViewById(R.id.searchViewPesquisa);
         recyclerViewPesquisa = view.findViewById(R.id.recyclerViewPesquisa);
-        campoFiltro = view.findViewById(R.id.spinnerPesquisa);
 
         //Configurações iniciais
         listaPrestador = new ArrayList<>();
@@ -149,23 +153,36 @@ public class PesquisaFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
                 String textoDigitado = newText;
-                pesquisarPrestador(textoDigitado.toLowerCase());
+                pesquisarPrestador(textoDigitado.toLowerCase(), filtroDistancia);
                 return true;
             }
 
         });
 
+        //Configura evento de clique no botão de distância
+        filtroButton = view.findViewById(R.id.buttonDistanciaPesquisa);
+        filtroButton.setText("Até 10Km");
+
+        final AlertDialog alerta = filtroDistancia();
+        filtroButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alerta.show();
+            }
+        });
+
+
         return view;
 
     }
 
-    private void pesquisarPrestador(String texto) {
+    private void pesquisarPrestador(final String texto, final String filtro) {
 
         //limpa lista
         listaPrestador.clear();
 
         //pesquisa usuários caso tenha texto na pesquisa
-        if (texto.length() >= 3) {
+        if (texto.length() >= 1) {
             Query query = usuarioRef.orderByChild("atuacaoMinusculo")
                     .startAt(texto)
                     .endAt(texto + "\uf8ff");
@@ -179,7 +196,6 @@ public class PesquisaFragment extends Fragment {
                         Usuario usuario = ds.getValue(Usuario.class);
                         if (usuario.getTipoCadastro().equals("PRESTADOR")) {
                             float distancia = localizacao.calcularDistancia(usuario.getLatitude(), usuario.getLongitude());
-                            String filtro = filtroDistancia();
                             switch (filtro) {
                                 case "Até 10Km":
                                     if (distancia < 10) {
@@ -231,25 +247,23 @@ public class PesquisaFragment extends Fragment {
 
     }
 
-    public String filtroDistancia() {
-        /*AlertDialog.Builder dialogDistancia = new AlertDialog.Builder(this.getActivity());
+
+
+    public AlertDialog filtroDistancia() {
+        AlertDialog.Builder dialogDistancia = new AlertDialog.Builder(this.getActivity());
         dialogDistancia.setTitle("Seleciona a distância desejada");
 
         //Configurar spinner
-        View viewSpinner = getLayoutInflater().inflate(R.layout.dialog_spinner, null);*/
+        View viewSpinner = getLayoutInflater().inflate(R.layout.dialog_spinner, null);
 
+        final Spinner spinnerDistancia = viewSpinner.findViewById(R.id.spinnerFiltro);
         String[] distancia = getResources().getStringArray(R.array.distancia);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this.getActivity(), android.R.layout.simple_spinner_item,
                 distancia
         );
         adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        campoFiltro.setAdapter(adapter);
-
-        return campoFiltro.getSelectedItem().toString();
-
-        /*//Configura spinner de distância
-        final Spinner spinnerDistancia = viewSpinner.findViewById(R.id.spinnerDistancia);
+        spinnerDistancia.setAdapter(adapter);
 
         dialogDistancia.setView(viewSpinner);
 
@@ -257,7 +271,7 @@ public class PesquisaFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 filtroDistancia = spinnerDistancia.getSelectedItem().toString();
-                recuperarPrestadores();
+                filtroButton.setText(filtroDistancia);
             }
         }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             @Override
@@ -266,8 +280,7 @@ public class PesquisaFragment extends Fragment {
             }
         });
 
-        AlertDialog dialog = dialogDistancia.create();
-        dialog.show();*/
+        return dialogDistancia.create();
 
     }
 }

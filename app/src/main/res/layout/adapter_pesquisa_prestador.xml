@@ -6,7 +6,8 @@
     android:orientation="vertical"
     android:paddingLeft="16dp"
     android:paddingTop="10dp"
-    android:paddingRight="16dp">
+    android:paddingRight="16dp"
+    android:paddingBottom="10dp">
 
 
     <LinearLayout
@@ -17,8 +18,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageFotoPesquisa"
-            android:layout_width="81dp"
-            android:layout_height="81dp"
+            android:layout_width="92dp"
+            android:layout_height="92dp"
             android:src="@drawable/avatar"
             app:civ_border_color="#FF000000"
             app:civ_border_width="1dp" />
@@ -33,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center|left"
+                android:gravity="center_horizontal|left"
                 android:paddingLeft="10dp"
                 android:text="Nome"
                 android:textSize="18sp"
@@ -44,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center|left"
+                android:gravity="center_horizontal|left"
                 android:paddingLeft="10dp"
                 android:text="Categoria"
                 android:textSize="16sp" />
@@ -54,7 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center|left"
+                android:gravity="center_horizontal|left"
                 android:paddingLeft="10dp"
                 android:text="Atuacao"
                 android:textSize="16sp" />
@@ -64,6 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center_horizontal|left"
                 android:paddingLeft="10dp"
                 android:text="Distância"
                 android:textSize="15sp" />
