@@ -35,6 +35,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -196,6 +197,7 @@ public class HomeFragment extends Fragment {
                                     String emailUsuarioAtual = usuarioAtual.getEmail();
                                     if (!emailUsuarioAtual.equals(usuario.getEmail())) {
                                         listaPrestador.add(usuario);
+                                        Collections.sort(listaPrestador);
                                     }
                                 }
                                 break;
@@ -204,6 +206,7 @@ public class HomeFragment extends Fragment {
                                     String emailUsuarioAtual = usuarioAtual.getEmail();
                                     if (!emailUsuarioAtual.equals(usuario.getEmail())) {
                                         listaPrestador.add(usuario);
+                                        Collections.sort(listaPrestador);
                                     }
                                 }
                                 break;
@@ -212,6 +215,7 @@ public class HomeFragment extends Fragment {
                                     String emailUsuarioAtual = usuarioAtual.getEmail();
                                     if (!emailUsuarioAtual.equals(usuario.getEmail())) {
                                         listaPrestador.add(usuario);
+                                        Collections.sort(listaPrestador);
                                     }
                                 }
                                 break;
@@ -220,12 +224,16 @@ public class HomeFragment extends Fragment {
                                     String emailUsuarioAtual = usuarioAtual.getEmail();
                                     if (!emailUsuarioAtual.equals(usuario.getEmail())) {
                                         listaPrestador.add(usuario);
+                                        Collections.sort(listaPrestador);
                                     }
                                 }
                                 break;
+                            default:
+                                throw new IllegalStateException("Unexpected value: " + filtro);
                         }
                     }
                 }
+
                 adapter.notifyDataSetChanged();
             }
 

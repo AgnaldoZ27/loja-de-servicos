@@ -1,6 +1,7 @@
 package com.ajdev.lojadeservicos.model;
 
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
+import com.ajdev.lojadeservicos.helper.Localizacao;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 
@@ -8,7 +9,9 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Usuario implements Serializable {
+public class Usuario implements Serializable, Comparable<Usuario>{
+
+    private Localizacao localizacao;
 
     private String idUsuario;
     private String tipoCadastro;
@@ -208,5 +211,18 @@ public class Usuario implements Serializable {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    @Override
+    public int compareTo(Usuario o) {
+        float distancia = localizacao.calcularDistancia(this.latitude, this.longitude);
+        float distancia2 = localizacao.calcularDistancia(o.getLatitude(), o.getLongitude());
+        if(distancia > distancia2){
+            return 1;
+        }
+        if(distancia < distancia2){
+            return -1;
+        }
+        return 0;
     }
 }
