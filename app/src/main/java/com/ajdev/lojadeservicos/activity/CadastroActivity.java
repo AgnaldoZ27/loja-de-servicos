@@ -8,6 +8,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +34,8 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CadastroActivity extends AppCompatActivity {
 
@@ -64,46 +67,47 @@ public class CadastroActivity extends AppCompatActivity {
                 //validar campos
                 if (!textoNome.isEmpty()) {
                     if (!textoCep.isEmpty()) {
-                        if (!textoTelefone.isEmpty()) {
-                            if (!textoEmail.isEmpty()) {
-                                if (!textoSenha.isEmpty()) {
+                        if (textoCep.length() == 9) {
+                            if (!textoTelefone.isEmpty()) {
+                                if (!textoEmail.isEmpty()) {
+                                    if (!textoSenha.isEmpty()) {
 
-                                    usuario = new Usuario();
-                                    usuario.setTipoCadastro(tipoCadastro);
-                                    usuario.setNome(textoNome);
-                                    usuario.setCEP(textoCep);
-                                    usuario.setTelefone(textoTelefone);
-                                    usuario.setEmail(textoEmail);
-                                    usuario.setSenha(textoSenha);
-                                    try {
-                                        recuperarLatLong();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
+                                        usuario = new Usuario();
+                                        usuario.setTipoCadastro(tipoCadastro);
+                                        usuario.setNome(textoNome);
+                                        usuario.setCEP(textoCep);
+                                        usuario.setTelefone(textoTelefone);
+                                        usuario.setEmail(textoEmail);
+                                        usuario.setSenha(textoSenha);
+                                        try {
+                                            recuperarLatLong();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                        cadastrarUsuario();
+
+
+                                    } else {
+                                        Toast.makeText(CadastroActivity.this,
+                                                "Preencha o campo senha!",
+                                                Toast.LENGTH_SHORT).show();
                                     }
-                                    cadastrarUsuario();
-
-
                                 } else {
                                     Toast.makeText(CadastroActivity.this,
-                                            "Preencha o campo senha!",
+                                            "Preencha o campo email!",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             } else {
                                 Toast.makeText(CadastroActivity.this,
-                                        "Preencha o campo email!",
+                                        "Preencha o campo telefone!",
                                         Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             Toast.makeText(CadastroActivity.this,
-                                    "Preencha o campo telefone!",
+                                    "Preencha o campo CEP!",
                                     Toast.LENGTH_SHORT).show();
                         }
-                    } else {
-                        Toast.makeText(CadastroActivity.this,
-                                "Preencha o campo CEP!",
-                                Toast.LENGTH_SHORT).show();
                     }
-
                 } else {
                     Toast.makeText(CadastroActivity.this,
                             "Preencha o campo nome!",
@@ -162,7 +166,6 @@ public class CadastroActivity extends AppCompatActivity {
     }
 
 
-
     public void inicializarComponentes() {
 
         campoNome = findViewById(R.id.editNome);
@@ -183,9 +186,9 @@ public class CadastroActivity extends AppCompatActivity {
         Address address = addresses.get(0);
         latitude = address.getLatitude();
         longitude = address.getLongitude();
-
         usuario.setLatitude(latitude);
         usuario.setLongitude(longitude);
     }
+
 
 }

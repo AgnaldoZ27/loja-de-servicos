@@ -91,6 +91,7 @@ public class Localizacao {
 
     }
 
+
     public static double getLatitude() {
         return latitude;
     }

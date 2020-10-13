@@ -38,12 +38,11 @@ public class PrincipalActivity extends AppCompatActivity {
         //configurações de objetos
         autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
 
-
         //Configurar bottom navigation view
         configurarBottomNavigationView();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.viewPager, new HomeFragment()).commit();
+        fragmentTransaction.replace(R.id.viewPager, new PesquisaFragment()).commit();
     }
 
     /**
@@ -115,6 +114,7 @@ public class PrincipalActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     private void deslogarUsuario() {
         try {

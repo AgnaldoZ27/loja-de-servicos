@@ -47,11 +47,13 @@ public class MainActivity extends IntroActivity {
         autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
         if (autenticacao.getCurrentUser() != null) {
             abrirTelaPrincipal();
+            finish();
         }
     };
 
     public void abrirTelaPrincipal() {
         startActivity(new Intent(this, PrincipalActivity.class));
+        finish();
     }
 
 }

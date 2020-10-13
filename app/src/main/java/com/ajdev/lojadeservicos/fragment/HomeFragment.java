@@ -1,14 +1,20 @@
 package com.ajdev.lojadeservicos.fragment;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,11 +24,11 @@ import com.ajdev.lojadeservicos.activity.PerfilPrestadorActivity;
 import com.ajdev.lojadeservicos.adapter.PesquisaAdapter;
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
 import com.ajdev.lojadeservicos.config.Permissoes;
+import com.ajdev.lojadeservicos.helper.Localizacao;
 import com.ajdev.lojadeservicos.helper.RecyclerItemClickListener;
 import com.ajdev.lojadeservicos.helper.UsuarioFirebase;
 import com.ajdev.lojadeservicos.model.Usuario;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,6 +52,13 @@ public class HomeFragment extends Fragment {
             Manifest.permission.ACCESS_FINE_LOCATION};
     private String identificadorUsuario;
     private FirebaseUser usuarioAtual;
+    private Localizacao localizacao;
+
+    private String filtroDistancia = "";
+    private Button filtroButton;
+
+    private Spinner spinner;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -99,6 +112,7 @@ public class HomeFragment extends Fragment {
         identificadorUsuario = UsuarioFirebase.getIdentficadorUsuario();
         usuarioAtual = UsuarioFirebase.getUsuarioAtual();
 
+
         //Validar permissões
         Permissoes.validarPermissoes(permissoes, this.getActivity(), 1);
 
@@ -106,6 +120,7 @@ public class HomeFragment extends Fragment {
         adapter = new PesquisaAdapter(listaPrestador, getActivity());
 
         //Configura RecyclerView
+
         recyclerViewHome.setHasFixedSize(true);
         recyclerViewHome.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new PesquisaAdapter(listaPrestador, getActivity());
@@ -138,17 +153,35 @@ public class HomeFragment extends Fragment {
                     }
                 }
         ));
+
+        //Configura evento de clique no botão de distância
+        filtroButton = view.findViewById(R.id.buttonDistancia);
+        filtroButton.setText("Prestadores Até 10Km de Você");
+
+        final AlertDialog alerta = filtroDistancia();
+        filtroButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alerta.show();
+            }
+        });
+
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        recuperarPrestadores();
+        recuperarPrestadores("Até 10Km");
     }
 
-
-    public void recuperarPrestadores() {
+    public void recuperarPrestadores(final String filtro) {
         listaPrestador.clear();
         usuarioRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -156,9 +189,40 @@ public class HomeFragment extends Fragment {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Usuario usuario = ds.getValue(Usuario.class);
                     if (usuario.getTipoCadastro().equals("PRESTADOR")) {
-                        String emailUsuarioAtual = usuarioAtual.getEmail();
-                        if(!emailUsuarioAtual.equals(usuario.getEmail())){
-                            listaPrestador.add(usuario);
+                        float distancia = localizacao.calcularDistancia(usuario.getLatitude(), usuario.getLongitude());
+                        switch (filtro) {
+                            case "Até 10Km":
+                                if (distancia < 10) {
+                                    String emailUsuarioAtual = usuarioAtual.getEmail();
+                                    if (!emailUsuarioAtual.equals(usuario.getEmail())) {
+                                        listaPrestador.add(usuario);
+                                    }
+                                }
+                                break;
+                            case "Até 25Km":
+                                if (distancia < 25) {
+                                    String emailUsuarioAtual = usuarioAtual.getEmail();
+                                    if (!emailUsuarioAtual.equals(usuario.getEmail())) {
+                                        listaPrestador.add(usuario);
+                                    }
+                                }
+                                break;
+                            case "Até 50Km":
+                                if (distancia < 50) {
+                                    String emailUsuarioAtual = usuarioAtual.getEmail();
+                                    if (!emailUsuarioAtual.equals(usuario.getEmail())) {
+                                        listaPrestador.add(usuario);
+                                    }
+                                }
+                                break;
+                            case "Até 100Km":
+                                if (distancia < 100) {
+                                    String emailUsuarioAtual = usuarioAtual.getEmail();
+                                    if (!emailUsuarioAtual.equals(usuario.getEmail())) {
+                                        listaPrestador.add(usuario);
+                                    }
+                                }
+                                break;
                         }
                     }
                 }
@@ -171,5 +235,40 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
+    public AlertDialog filtroDistancia() {
+
+        AlertDialog.Builder dialogDistancia = new AlertDialog.Builder(getActivity());
+        dialogDistancia.setTitle("Selecione a distância desejada");
+
+        //Configurar spinner
+        View viewSpinner = getLayoutInflater().inflate(R.layout.dialog_spinner, null);
+
+        final Spinner spinnerDistancia = viewSpinner.findViewById(R.id.spinnerFiltro);
+        String[] distancias = getResources().getStringArray(R.array.distancia);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_item,distancias);
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        spinnerDistancia.setAdapter(adapter);
+
+        dialogDistancia.setView(viewSpinner);
+
+        dialogDistancia.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                filtroDistancia = spinnerDistancia.getSelectedItem().toString();
+                recuperarPrestadores(filtroDistancia);
+                filtroButton.setText("Prestadores "+filtroDistancia+" de você");
+            }
+        }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+       return dialogDistancia.create();
+
+
+    }
+
 
 }

@@ -2,12 +2,13 @@ package com.ajdev.lojadeservicos.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.SearchView;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,6 +19,7 @@ import com.ajdev.lojadeservicos.R;
 import com.ajdev.lojadeservicos.activity.PerfilPrestadorActivity;
 import com.ajdev.lojadeservicos.adapter.PesquisaAdapter;
 import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
+import com.ajdev.lojadeservicos.helper.Localizacao;
 import com.ajdev.lojadeservicos.helper.RecyclerItemClickListener;
 import com.ajdev.lojadeservicos.helper.UsuarioFirebase;
 import com.ajdev.lojadeservicos.model.Usuario;
@@ -41,11 +43,13 @@ public class PesquisaFragment extends Fragment {
     //Widget
     private SearchView searchViewPesquisa;
     private RecyclerView recyclerViewPesquisa;
+    private Spinner campoFiltro;
 
-    private List<Usuario> listaUsuario;
+    private List<Usuario> listaPrestador;
     private DatabaseReference usuarioRef;
     private PesquisaAdapter adapterPesquisa;
     private FirebaseUser usuarioAtual;
+    private Localizacao localizacao;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -95,9 +99,10 @@ public class PesquisaFragment extends Fragment {
 
         searchViewPesquisa = view.findViewById(R.id.searchViewPesquisa);
         recyclerViewPesquisa = view.findViewById(R.id.recyclerViewPesquisa);
+        campoFiltro = view.findViewById(R.id.spinnerPesquisa);
 
         //Configurações iniciais
-        listaUsuario = new ArrayList<>();
+        listaPrestador = new ArrayList<>();
         usuarioRef = ConfiguracaoFirebase.getFirebaseDataBase()
                 .child("usuarios");
         usuarioAtual = UsuarioFirebase.getUsuarioAtual();
@@ -105,7 +110,7 @@ public class PesquisaFragment extends Fragment {
         //Configura RecyclerView
         recyclerViewPesquisa.setHasFixedSize(true);
         recyclerViewPesquisa.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapterPesquisa = new PesquisaAdapter(listaUsuario, getActivity());
+        adapterPesquisa = new PesquisaAdapter(listaPrestador, getActivity());
         recyclerViewPesquisa.setAdapter(adapterPesquisa);
 
         //Configurar evento de clique
@@ -115,7 +120,7 @@ public class PesquisaFragment extends Fragment {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        Usuario usuarioSelecionado = listaUsuario.get(position);
+                        Usuario usuarioSelecionado = listaPrestador.get(position);
                         Intent i = new Intent(getActivity(), PerfilPrestadorActivity.class);
                         i.putExtra("prestadorSelecionado", usuarioSelecionado);
                         startActivity(i);
@@ -157,7 +162,7 @@ public class PesquisaFragment extends Fragment {
     private void pesquisarPrestador(String texto) {
 
         //limpa lista
-        listaUsuario.clear();
+        listaPrestador.clear();
 
         //pesquisa usuários caso tenha texto na pesquisa
         if (texto.length() >= 3) {
@@ -168,13 +173,47 @@ public class PesquisaFragment extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     //limpa lista
-                    listaUsuario.clear();
+                    listaPrestador.clear();
 
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
                         Usuario usuario = ds.getValue(Usuario.class);
-                        String emailUsuarioAtual = usuarioAtual.getEmail();
-                        if (!emailUsuarioAtual.equals(usuario.getEmail())) {
-                            listaUsuario.add(usuario);
+                        if (usuario.getTipoCadastro().equals("PRESTADOR")) {
+                            float distancia = localizacao.calcularDistancia(usuario.getLatitude(), usuario.getLongitude());
+                            String filtro = filtroDistancia();
+                            switch (filtro) {
+                                case "Até 10Km":
+                                    if (distancia < 10) {
+                                        String emailUsuarioAtual = usuarioAtual.getEmail();
+                                        if (!emailUsuarioAtual.equals(usuario.getEmail())) {
+                                            listaPrestador.add(usuario);
+                                        }
+                                    }
+                                    break;
+                                case "Até 25Km":
+                                    if (distancia < 25) {
+                                        String emailUsuarioAtual = usuarioAtual.getEmail();
+                                        if (!emailUsuarioAtual.equals(usuario.getEmail())) {
+                                            listaPrestador.add(usuario);
+                                        }
+                                    }
+                                    break;
+                                case "Até 50Km":
+                                    if (distancia < 50) {
+                                        String emailUsuarioAtual = usuarioAtual.getEmail();
+                                        if (!emailUsuarioAtual.equals(usuario.getEmail())) {
+                                            listaPrestador.add(usuario);
+                                        }
+                                    }
+                                    break;
+                                case "Até 100Km":
+                                    if (distancia < 100) {
+                                        String emailUsuarioAtual = usuarioAtual.getEmail();
+                                        if (!emailUsuarioAtual.equals(usuario.getEmail())) {
+                                            listaPrestador.add(usuario);
+                                        }
+                                    }
+                                    break;
+                            }
                         }
                     }
                     adapterPesquisa.notifyDataSetChanged();
@@ -189,6 +228,46 @@ public class PesquisaFragment extends Fragment {
                 }
             });
         }
+
+    }
+
+    public String filtroDistancia() {
+        /*AlertDialog.Builder dialogDistancia = new AlertDialog.Builder(this.getActivity());
+        dialogDistancia.setTitle("Seleciona a distância desejada");
+
+        //Configurar spinner
+        View viewSpinner = getLayoutInflater().inflate(R.layout.dialog_spinner, null);*/
+
+        String[] distancia = getResources().getStringArray(R.array.distancia);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this.getActivity(), android.R.layout.simple_spinner_item,
+                distancia
+        );
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        campoFiltro.setAdapter(adapter);
+
+        return campoFiltro.getSelectedItem().toString();
+
+        /*//Configura spinner de distância
+        final Spinner spinnerDistancia = viewSpinner.findViewById(R.id.spinnerDistancia);
+
+        dialogDistancia.setView(viewSpinner);
+
+        dialogDistancia.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                filtroDistancia = spinnerDistancia.getSelectedItem().toString();
+                recuperarPrestadores();
+            }
+        }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        AlertDialog dialog = dialogDistancia.create();
+        dialog.show();*/
 
     }
 }
