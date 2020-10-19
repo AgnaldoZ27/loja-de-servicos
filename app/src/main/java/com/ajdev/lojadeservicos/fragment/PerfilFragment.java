@@ -2,15 +2,14 @@ package com.ajdev.lojadeservicos.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.ajdev.lojadeservicos.R;
 import com.ajdev.lojadeservicos.activity.EditarPerfilActivity;
@@ -18,6 +17,7 @@ import com.ajdev.lojadeservicos.config.ConfiguracaoFirebase;
 import com.ajdev.lojadeservicos.helper.UsuarioFirebase;
 import com.ajdev.lojadeservicos.model.Usuario;
 import com.bumptech.glide.Glide;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,7 +34,7 @@ public class PerfilFragment extends Fragment {
 
     private CircleImageView imagePerfil;
     private TextView nomePerfil, telefonePerfil, emailPerfil, cepPerfil, categoriaPerfil, atuacaoPerfil, descricaoPerfil;
-    private Button buttonAcaoPerfil;
+    private FloatingActionButton buttonAcao;
     private DatabaseReference usuarioRef;
     private String identificadorUsuario;
     private Usuario usuario;
@@ -99,7 +99,7 @@ public class PerfilFragment extends Fragment {
         categoriaPerfil = view.findViewById(R.id.textViewCategoriaPerfil);
         atuacaoPerfil = view.findViewById(R.id.textViewAtuacaoPerfil);
         descricaoPerfil = view.findViewById(R.id.textViewDescricaoPerfil);
-        buttonAcaoPerfil = view.findViewById(R.id.buttonEditarPerfil);
+        buttonAcao = view.findViewById(R.id.fabPerfil);
 
         //Recuperar informações do perfil
         DatabaseReference databaseReference = usuarioRef
@@ -145,7 +145,7 @@ public class PerfilFragment extends Fragment {
         });
 
         //Abre edição de perfil
-        buttonAcaoPerfil.setOnClickListener(new View.OnClickListener() {
+        buttonAcao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), EditarPerfilActivity.class);
