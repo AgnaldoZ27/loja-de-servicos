@@ -13,13 +13,16 @@ import com.ajdev.lojadeservicos.R;
 import com.ajdev.lojadeservicos.model.Usuario;
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PerfilPrestadorActivity extends AppCompatActivity {
 
     private Usuario usuarioSelecionado;
-    private TextView nome, telefone, email, endereco, categoria, atuacao, descricao;
+    private TextInputEditText nome, telefone, email, endereco, categoria, atuacao, descricao;
+    private TextInputLayout textInputCategoria, textInputAtuacao, textInputDescricao;
     private CircleImageView fotoPerfil;
     private FloatingActionButton buttonAcao;
 
@@ -30,8 +33,7 @@ public class PerfilPrestadorActivity extends AppCompatActivity {
 
         //Inicializar Componenetes
         inicializarComponentes();
-        Drawable drawable = Drawable.createFromPath("@drawable/ic_settings");
-        buttonAcao.setImageDrawable(drawable);
+        buttonAcao.setImageDrawable(getResources().getDrawable(R.drawable.ic_mensagem));
 
         //Configurar toolbar
         Toolbar toolbar = findViewById(R.id.toolbarPrincipal);
@@ -54,11 +56,11 @@ public class PerfilPrestadorActivity extends AppCompatActivity {
             telefone.setText(usuarioSelecionado.getTelefone());
             email.setText(usuarioSelecionado.getEmail());
             endereco.setText(usuarioSelecionado.getCEP());
-            categoria.setVisibility(View.VISIBLE);
+            textInputCategoria.setVisibility(View.VISIBLE);
             categoria.setText(usuarioSelecionado.getCategoria());
-            atuacao.setVisibility(View.VISIBLE);
+            textInputAtuacao.setVisibility(View.VISIBLE);
             atuacao.setText(usuarioSelecionado.getAtuacao());
-            descricao.setVisibility(View.VISIBLE);
+            textInputDescricao.setVisibility(View.VISIBLE);
             descricao.setText(usuarioSelecionado.getDescricao());
 
             //Configura foto de perfil
@@ -94,6 +96,10 @@ public class PerfilPrestadorActivity extends AppCompatActivity {
         categoria = findViewById(R.id.textViewCategoriaPerfil);
         atuacao = findViewById(R.id.textViewAtuacaoPerfil);
         descricao = findViewById(R.id.textViewDescricaoPerfil);
+
+        textInputCategoria = findViewById(R.id.textInputCategoriaPerfil);
+        textInputAtuacao = findViewById(R.id.textInputAtuacaoPerfil);
+        textInputDescricao = findViewById(R.id.textInputDescricaoPerfil);
 
     }
 

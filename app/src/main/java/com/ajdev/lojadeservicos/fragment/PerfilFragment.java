@@ -18,6 +18,8 @@ import com.ajdev.lojadeservicos.helper.UsuarioFirebase;
 import com.ajdev.lojadeservicos.model.Usuario;
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,7 +35,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class PerfilFragment extends Fragment {
 
     private CircleImageView imagePerfil;
-    private TextView nomePerfil, telefonePerfil, emailPerfil, cepPerfil, categoriaPerfil, atuacaoPerfil, descricaoPerfil;
+    private TextInputEditText nomePerfil, telefonePerfil, emailPerfil, cepPerfil, categoriaPerfil, atuacaoPerfil, descricaoPerfil;
+    private TextInputLayout textInputCategoria, textInputAtuacao, textInputDescricao;
     private FloatingActionButton buttonAcao;
     private DatabaseReference usuarioRef;
     private String identificadorUsuario;
@@ -101,6 +104,10 @@ public class PerfilFragment extends Fragment {
         descricaoPerfil = view.findViewById(R.id.textViewDescricaoPerfil);
         buttonAcao = view.findViewById(R.id.fabPerfil);
 
+        textInputCategoria = view.findViewById(R.id.textInputCategoriaPerfil);
+        textInputAtuacao = view.findViewById(R.id.textInputAtuacaoPerfil);
+        textInputDescricao = view.findViewById(R.id.textInputDescricaoPerfil);
+
         //Recuperar informações do perfil
         DatabaseReference databaseReference = usuarioRef
                 .child("usuarios")
@@ -118,11 +125,11 @@ public class PerfilFragment extends Fragment {
                     telefonePerfil.setText(usuario.getTelefone());
                     String tipo = usuario.getTipoCadastro();
                     if (tipo.equals("PRESTADOR")) {
-                        categoriaPerfil.setVisibility(View.VISIBLE);
+                        textInputCategoria.setVisibility(View.VISIBLE);
                         categoriaPerfil.setText(usuario.getCategoria());
-                        atuacaoPerfil.setVisibility(View.VISIBLE);
+                        textInputAtuacao.setVisibility(View.VISIBLE);
                         atuacaoPerfil.setText(usuario.getAtuacao());
-                        descricaoPerfil.setVisibility(View.VISIBLE);
+                        textInputDescricao.setVisibility(View.VISIBLE);
                         descricaoPerfil.setText(usuario.getDescricao());
                     }
 
